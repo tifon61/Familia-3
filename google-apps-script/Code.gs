@@ -14,7 +14,7 @@
 const SHEET_PUBLICACIONES = "Publicaciones";
 const SHEET_UBICACIONES = "Ubicaciones";
 const SHEET_PERFILES = "Perfiles";
-const FOLDER_ID = "PON_AQUI_EL_ID_DE_TU_CARPETA_DE_DRIVE";
+const FOLDER_ID = "1ZSB2d5IFvndyLStUaROiuVnqd9A9WL0h";
 
 const ENCABEZADOS_PUBLICACIONES = [
   "id", "familiarId", "tipo", "titulo", "descripcion",
