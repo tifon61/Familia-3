@@ -5,9 +5,9 @@ const markers = {};
 async function iniciar() {
   const resp = await fetch("data/familiares.json");
   const seed = await resp.json();
-  const { posts, ubicaciones } = await Api.obtenerDatos();
+  const { posts, ubicaciones, perfiles } = await Api.obtenerDatos();
 
-  familiares = fusionarUbicaciones(seed, ubicaciones);
+  familiares = fusionarDatos(seed, ubicaciones, perfiles);
 
   renderTarjetas();
   renderMapa();
@@ -18,22 +18,27 @@ async function iniciar() {
   configurarCheckin();
 }
 
-// Combina los datos fijos del familiar (nombre, avatar, bio) con la última
-// ubicación que reportó desde el formulario de check-in (si hay alguna).
-function fusionarUbicaciones(seed, ubicaciones) {
-  const porId = {};
-  ubicaciones.forEach((u) => (porId[u.familiarId] = u));
+// Combina los datos fijos del familiar (id) con lo último que cada uno haya
+// reportado: su ubicación (check-in) y su perfil editado (nombre/avatar/bio).
+function fusionarDatos(seed, ubicaciones, perfiles) {
+  const ubicacionPorId = {};
+  (ubicaciones || []).forEach((u) => (ubicacionPorId[u.familiarId] = u));
+  const perfilPorId = {};
+  (perfiles || []).forEach((p) => (perfilPorId[p.familiarId] = p));
 
   return seed.map((f) => {
-    const u = porId[f.id];
-    if (!u) return f;
+    const u = ubicacionPorId[f.id];
+    const p = perfilPorId[f.id];
     return {
       ...f,
-      ciudad: u.ciudad || f.ciudad,
-      pais: u.pais || f.pais,
-      lat: u.lat || f.lat,
-      lon: u.lon || f.lon,
-      zonaHoraria: u.zonaHoraria || f.zonaHoraria
+      ciudad: (u && u.ciudad) || f.ciudad,
+      pais: (u && u.pais) || f.pais,
+      lat: (u && u.lat) || f.lat,
+      lon: (u && u.lon) || f.lon,
+      zonaHoraria: (u && u.zonaHoraria) || f.zonaHoraria,
+      nombre: (p && p.nombre) || f.nombre,
+      avatar: (p && p.avatar) || f.avatar,
+      bio: (p && p.bio) || f.bio
     };
   });
 }

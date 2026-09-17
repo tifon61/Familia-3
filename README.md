@@ -14,7 +14,7 @@ lugares gratuitos:
 |---|---|---|
 | Sitio (HTML/CSS/JS) | GitHub Pages | Muestra el mapa, los relojes, el muro y los perfiles. Es 100% estático: no hay build, no hay backend propio. |
 | Lista de familiares | `data/familiares.json` en este repo | Quiénes son: nombre, avatar, bio, y una ubicación/zona horaria *inicial*. Se edita a mano y se sube con `git push`. |
-| Ubicación actual + muro (fotos/videos) | Google Drive + Google Sheets, vía un script de Google Apps Script | Cuando alguien hace "check-in" desde la home (dónde está + qué está haciendo + foto opcional), el script guarda el archivo en Drive, actualiza su ubicación en la hoja "Ubicaciones" y agrega la publicación a la hoja "Publicaciones". El sitio lee ambas para armar el mapa y el muro. |
+| Ubicación actual + muro (fotos/videos) + perfil editable | Google Drive + Google Sheets, vía un script de Google Apps Script | Cuando alguien hace "check-in" desde la home, el script actualiza la hoja "Ubicaciones" y agrega la publicación a "Publicaciones". Cuando alguien edita su nombre/foto/bio desde su perfil, se guarda en la hoja "Perfiles". El sitio combina las tres para armar el mapa, las tarjetas y el muro. |
 
 ### Piezas clave del código
 

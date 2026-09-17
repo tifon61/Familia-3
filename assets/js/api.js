@@ -4,14 +4,14 @@ const Api = {
   },
 
   async obtenerDatos() {
-    if (!this.backendConfigurado()) return { posts: [], ubicaciones: [] };
+    if (!this.backendConfigurado()) return { posts: [], ubicaciones: [], perfiles: [] };
     try {
       const resp = await fetch(window.APP_CONFIG.APPS_SCRIPT_URL);
       const data = await resp.json();
-      return { posts: data.posts || [], ubicaciones: data.ubicaciones || [] };
+      return { posts: data.posts || [], ubicaciones: data.ubicaciones || [], perfiles: data.perfiles || [] };
     } catch (err) {
       console.error("No se pudo cargar el muro familiar:", err);
-      return { posts: [], ubicaciones: [], error: err };
+      return { posts: [], ubicaciones: [], perfiles: [], error: err };
     }
   },
 

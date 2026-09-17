@@ -6,9 +6,10 @@ let familiar = null;
 async function iniciar() {
   const resp = await fetch("data/familiares.json");
   const seed = await resp.json();
-  const { posts, ubicaciones } = await Api.obtenerDatos();
+  const { posts, ubicaciones, perfiles } = await Api.obtenerDatos();
 
   const ubicacion = ubicaciones.find((u) => u.familiarId === idFamiliar);
+  const perfil = perfiles.find((p) => p.familiarId === idFamiliar);
   familiar = seed.find((f) => f.id === idFamiliar);
 
   if (!familiar) {
@@ -25,11 +26,21 @@ async function iniciar() {
     };
   }
 
+  if (perfil) {
+    familiar = {
+      ...familiar,
+      nombre: perfil.nombre || familiar.nombre,
+      avatar: perfil.avatar || familiar.avatar,
+      bio: perfil.bio || familiar.bio
+    };
+  }
+
   renderHeader();
   setInterval(renderHora, 1000);
   renderHora();
 
   renderHistorico(posts.filter((p) => p.familiarId === idFamiliar));
+  configurarEdicionPerfil();
 
   if (!Api.backendConfigurado()) {
     const aviso = document.getElementById("aviso-backend");
@@ -59,6 +70,61 @@ function renderHora() {
   const d = document.querySelector("[data-fecha]");
   if (h) h.textContent = `${Reloj.formatoHora(dt)} (${Reloj.desfaseTexto(dt)})`;
   if (d) d.textContent = Reloj.formatoDia(dt);
+}
+
+function configurarEdicionPerfil() {
+  const btnToggle = document.getElementById("btn-toggle-editar");
+  const form = document.getElementById("form-perfil");
+
+  if (!Api.backendConfigurado()) {
+    btnToggle.style.display = "none";
+    return;
+  }
+
+  form.nombre.value = familiar.nombre;
+  form.bio.value = familiar.bio || "";
+
+  btnToggle.addEventListener("click", () => {
+    form.style.display = form.style.display === "none" ? "block" : "none";
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const boton = form.querySelector("button[type=submit]");
+    boton.disabled = true;
+    boton.textContent = "Guardando...";
+
+    try {
+      const archivo = form.avatarArchivo.files[0];
+      let avatarBase64 = null;
+      let avatarFileName = null;
+      let avatarMimeType = null;
+
+      if (archivo) {
+        avatarBase64 = await Api.archivoABase64(archivo);
+        avatarFileName = archivo.name;
+        avatarMimeType = archivo.type;
+      }
+
+      await Api.publicar({
+        familiarId: idFamiliar,
+        perfil: {
+          nombre: form.nombre.value.trim(),
+          bio: form.bio.value.trim(),
+          avatarBase64,
+          avatarFileName,
+          avatarMimeType
+        }
+      });
+
+      location.reload();
+    } catch (err) {
+      alert("No se pudo guardar: " + err.message);
+    } finally {
+      boton.disabled = false;
+      boton.textContent = "Guardar";
+    }
+  });
 }
 
 function renderHistorico(publicaciones) {

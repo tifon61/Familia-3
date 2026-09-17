@@ -16,6 +16,21 @@
 
     <div id="aviso-backend" class="aviso" style="display:none"></div>
 
+    <button type="button" id="btn-toggle-editar" class="volver" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">✏️ Editar este perfil</button>
+
+    <form id="form-perfil" class="subir-form" style="display:none">
+      <label>Nombre</label>
+      <input type="text" name="nombre" placeholder="Nombre">
+
+      <label>Foto de perfil (opcional)</label>
+      <input type="file" name="avatarArchivo" accept="image/*">
+
+      <label>Sobre mí</label>
+      <textarea name="bio" placeholder="Contá algo sobre vos" rows="2"></textarea>
+
+      <button type="submit">Guardar</button>
+    </form>
+
     <h2>Histórico</h2>
     <section id="historico" class="historico"></section>
   </main>
