@@ -1,0 +1,194 @@
+:root {
+  --bg: #faf6f1;
+  --card: #ffffff;
+  --text: #2b2420;
+  --muted: #8a7f74;
+  --accent: #d97b4f;
+  --accent-dark: #b85f37;
+  --night: #2f3b52;
+  --border: #eee2d6;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header.app-header {
+  padding: 24px 20px 12px;
+  text-align: center;
+}
+
+header.app-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+
+header.app-header p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 20px 60px;
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.tarjeta {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.tarjeta.es-de-noche {
+  background: var(--night);
+  color: #f2f2f7;
+  border-color: var(--night);
+}
+
+.tarjeta.es-de-noche .muted { color: #b6bdd0; }
+
+.tarjeta img.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--border);
+}
+
+.tarjeta .info { min-width: 0; }
+.tarjeta .info .nombre { font-weight: 600; }
+.tarjeta .info .lugar { font-size: 0.8rem; color: var(--muted); }
+.tarjeta .info .hora { font-size: 1.4rem; font-variant-numeric: tabular-nums; font-weight: 700; margin-top: 4px; }
+.tarjeta .info .desfase { font-size: 0.72rem; color: var(--muted); }
+
+#mapa {
+  height: 420px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.marker-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.leaflet-popup-content { min-width: 160px; }
+.popup-nombre { font-weight: 700; margin-bottom: 2px; }
+.popup-hora { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.popup-link { display: inline-block; margin-top: 6px; font-size: 0.85rem; color: var(--accent-dark); }
+
+/* Perfil */
+.perfil-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.perfil-header img.avatar { width: 80px; height: 80px; border-radius: 50%; }
+.perfil-header .hora-grande { font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+.volver { color: var(--accent-dark); text-decoration: none; font-size: 0.9rem; }
+
+.subir-form {
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.subir-form input, .subir-form textarea, .subir-form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+.subir-form button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.subir-form button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.aviso {
+  background: #fff3e0;
+  border: 1px solid #ffd9a8;
+  color: #7a4a12;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.historico {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.publicacion {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.publicacion img, .publicacion video {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  background: var(--border);
+}
+
+.publicacion .contenido { padding: 12px; }
+.publicacion .titulo { font-weight: 600; margin-bottom: 2px; }
+.publicacion .fecha { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
+.publicacion .descripcion { font-size: 0.85rem; }
+
+.muted { color: var(--muted); }

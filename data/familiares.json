@@ -1,0 +1,57 @@
+[
+  {
+    "id": "vos",
+    "nombre": "Vos",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "lat": -34.6037,
+    "lon": -58.3816,
+    "zonaHoraria": "America/Argentina/Buenos_Aires",
+    "avatar": "https://api.dicebear.com/7.x/thumbs/svg?seed=vos",
+    "bio": "Editá este perfil en data/familiares.json"
+  },
+  {
+    "id": "primo",
+    "nombre": "Primo",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "lat": -34.6037,
+    "lon": -58.3816,
+    "zonaHoraria": "America/Argentina/Buenos_Aires",
+    "avatar": "https://api.dicebear.com/7.x/thumbs/svg?seed=primo",
+    "bio": "Editá este perfil en data/familiares.json"
+  },
+  {
+    "id": "tia",
+    "nombre": "Tía",
+    "ciudad": "París",
+    "pais": "Francia",
+    "lat": 48.8566,
+    "lon": 2.3522,
+    "zonaHoraria": "Europe/Paris",
+    "avatar": "https://api.dicebear.com/7.x/thumbs/svg?seed=tia",
+    "bio": "Editá este perfil en data/familiares.json"
+  },
+  {
+    "id": "prima1",
+    "nombre": "Prima 1",
+    "ciudad": "Sídney",
+    "pais": "Australia",
+    "lat": -33.8688,
+    "lon": 151.2093,
+    "zonaHoraria": "Australia/Sydney",
+    "avatar": "https://api.dicebear.com/7.x/thumbs/svg?seed=prima1",
+    "bio": "Editá este perfil en data/familiares.json"
+  },
+  {
+    "id": "prima2",
+    "nombre": "Prima 2",
+    "ciudad": "Melbourne",
+    "pais": "Australia",
+    "lat": -37.8136,
+    "lon": 144.9631,
+    "zonaHoraria": "Australia/Melbourne",
+    "avatar": "https://api.dicebear.com/7.x/thumbs/svg?seed=prima2",
+    "bio": "Editá este perfil en data/familiares.json"
+  }
+]
