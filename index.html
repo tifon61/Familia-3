@@ -19,11 +19,43 @@
     </section>
 
     <div id="mapa"></div>
+
+    <section class="checkin">
+      <h2>Contá dónde estás</h2>
+      <div id="aviso-backend" class="aviso" style="display:none"></div>
+      <form id="form-checkin" class="subir-form">
+        <label>Quién sos</label>
+        <select name="familiarId" required></select>
+
+        <label>Ciudad y país</label>
+        <button type="button" id="btn-geo">📍 Usar mi ubicación actual</button>
+        <input type="text" name="ciudad" placeholder="Ciudad" required>
+        <input type="text" name="pais" placeholder="País" required>
+        <input type="hidden" name="lat">
+        <input type="hidden" name="lon">
+        <input type="hidden" name="zonaHoraria">
+
+        <label>¿Qué estás haciendo?</label>
+        <textarea name="descripcion" placeholder="Contá algo..." rows="2"></textarea>
+
+        <label>Foto o video (opcional)</label>
+        <input type="file" name="archivo" accept="image/*,video/*">
+
+        <button type="submit">Publicar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Muro familiar</h2>
+      <div id="feed" class="historico"></div>
+    </section>
   </main>
 
+  <script src="assets/js/config.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
   <script src="assets/js/reloj.js"></script>
+  <script src="assets/js/api.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
