@@ -160,6 +160,16 @@ function configurarCheckin() {
     .join("");
   inputZona.value = Api.zonaHorariaLocal();
 
+  const inputArchivo = form.querySelector('[name="archivo"]');
+  const labelArchivo = form.querySelector('.file-label');
+  const textoLabelOriginal = labelArchivo.innerHTML;
+  inputArchivo.addEventListener("change", () => {
+    const archivo = inputArchivo.files[0];
+    labelArchivo.innerHTML = archivo
+      ? `<i class="fa-solid fa-circle-check"></i> ${archivo.name}`
+      : textoLabelOriginal;
+  });
+
   if (!Api.backendConfigurado()) {
     aviso.style.display = "block";
     aviso.textContent =
@@ -170,9 +180,10 @@ function configurarCheckin() {
   }
 
   const btnGeo = document.getElementById("btn-geo");
+  const textoBtnGeoOriginal = btnGeo.innerHTML;
   btnGeo.addEventListener("click", async () => {
     btnGeo.disabled = true;
-    btnGeo.textContent = "Buscando...";
+    btnGeo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Buscando...';
     try {
       const { lat, lon } = await Api.obtenerUbicacionActual();
       form.lat.value = lat;
@@ -186,7 +197,7 @@ function configurarCheckin() {
       alert("No se pudo obtener tu ubicación: " + err.message);
     } finally {
       btnGeo.disabled = false;
-      btnGeo.textContent = "📍 Usar mi ubicación actual";
+      btnGeo.innerHTML = textoBtnGeoOriginal;
     }
   });
 

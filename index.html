@@ -5,51 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Familia Alrededor del Mundo</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <header class="app-header">
-    <h1>🌍 Familia Alrededor del Mundo</h1>
-    <p>Qué hora es y dónde está cada uno, ahora mismo</p>
-  </header>
+  <div class="background-mesh"></div>
 
-  <main>
-    <section id="tarjetas" class="tarjetas">
-      <!-- Se completa por JS -->
-    </section>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1><i class="fa-solid fa-earth-americas"></i> Familia Alrededor del Mundo</h1>
+        <p>Qué hora es y dónde está cada uno, ahora mismo</p>
+      </div>
+    </header>
 
-    <div id="mapa"></div>
+    <main class="dashboard">
+      <div class="panel-lateral">
+        <section id="tarjetas" class="tarjetas-container">
+          <!-- Se completa por JS -->
+        </section>
 
-    <section class="checkin">
-      <h2>Contá dónde estás</h2>
-      <div id="aviso-backend" class="aviso" style="display:none"></div>
-      <form id="form-checkin" class="subir-form">
-        <label>Quién sos</label>
-        <select name="familiarId" required></select>
+        <section class="checkin-card glass-panel">
+          <h2><i class="fa-solid fa-location-dot"></i> Contá dónde estás</h2>
+          <div id="aviso-backend" class="aviso" style="display:none"></div>
 
-        <label>Ciudad y país</label>
-        <button type="button" id="btn-geo">📍 Usar mi ubicación actual</button>
-        <input type="text" name="ciudad" placeholder="Ciudad" required>
-        <input type="text" name="pais" placeholder="País" required>
-        <input type="hidden" name="lat">
-        <input type="hidden" name="lon">
-        <input type="hidden" name="zonaHoraria">
+          <form id="form-checkin" class="subir-form">
+            <div class="input-group">
+              <label><i class="fa-solid fa-user"></i> Quién sos</label>
+              <select name="familiarId" required class="modern-input"></select>
+            </div>
 
-        <label>¿Qué estás haciendo?</label>
-        <textarea name="descripcion" placeholder="Contá algo..." rows="2"></textarea>
+            <div class="input-group">
+              <label><i class="fa-solid fa-city"></i> Ciudad y país</label>
+              <div class="geo-wrapper">
+                <button type="button" id="btn-geo" class="btn-geo"><i class="fa-solid fa-crosshairs"></i> Usar mi ubicación</button>
+              </div>
+              <div class="split-inputs">
+                <input type="text" name="ciudad" placeholder="Ciudad" required class="modern-input">
+                <input type="text" name="pais" placeholder="País" required class="modern-input">
+              </div>
+              <input type="hidden" name="lat">
+              <input type="hidden" name="lon">
+              <input type="hidden" name="zonaHoraria">
+            </div>
 
-        <label>Foto o video (opcional)</label>
-        <input type="file" name="archivo" accept="image/*,video/*">
+            <div class="input-group">
+              <label><i class="fa-solid fa-comment-dots"></i> ¿Qué estás haciendo?</label>
+              <textarea name="descripcion" placeholder="Escribí algo acá..." rows="2" class="modern-input"></textarea>
+            </div>
 
-        <button type="submit">Publicar</button>
-      </form>
-    </section>
+            <div class="input-group file-upload">
+              <label for="archivo" class="file-label">
+                <i class="fa-solid fa-camera"></i> Subir foto o video
+              </label>
+              <input type="file" id="archivo" name="archivo" accept="image/*,video/*" class="hidden-file">
+            </div>
 
-    <section>
-      <h2>Muro familiar</h2>
-      <div id="feed" class="historico"></div>
-    </section>
-  </main>
+            <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Publicar</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="panel-principal">
+        <div class="mapa-wrapper glass-panel">
+          <div id="mapa"></div>
+        </div>
+
+        <section class="feed-section glass-panel">
+          <h2><i class="fa-solid fa-images"></i> Muro Familiar</h2>
+          <div id="feed" class="historico scrollable-feed"></div>
+        </section>
+      </div>
+    </main>
+  </div>
 
   <script src="assets/js/config.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

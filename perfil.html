@@ -4,36 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Perfil · Familia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <main>
-    <p><a class="volver" href="index.html">← Volver al mapa</a></p>
+  <div class="background-mesh"></div>
 
-    <section id="perfil-header" class="perfil-header">
-      <p class="muted">Cargando...</p>
-    </section>
+  <div class="app-container">
+    <main style="max-width: 720px; margin: 0 auto;">
+      <a class="volver" href="index.html"><i class="fa-solid fa-arrow-left"></i> Volver al mapa</a>
 
-    <div id="aviso-backend" class="aviso" style="display:none"></div>
+      <section id="perfil-header" class="perfil-header glass-panel">
+        <p class="muted">Cargando...</p>
+      </section>
 
-    <button type="button" id="btn-toggle-editar" class="volver" style="background:none;border:none;cursor:pointer;padding:0;font:inherit">✏️ Editar este perfil</button>
+      <div id="aviso-backend" class="aviso" style="display:none"></div>
 
-    <form id="form-perfil" class="subir-form" style="display:none">
-      <label>Nombre</label>
-      <input type="text" name="nombre" placeholder="Nombre">
+      <button type="button" id="btn-toggle-editar" class="btn-geo" style="width:auto;display:inline-flex;align-items:center;gap:8px;margin-bottom:16px">
+        <i class="fa-solid fa-pen"></i> Editar este perfil
+      </button>
 
-      <label>Foto de perfil (opcional)</label>
-      <input type="file" name="avatarArchivo" accept="image/*">
+      <form id="form-perfil" class="subir-form glass-panel" style="display:none;margin-bottom:24px">
+        <label><i class="fa-solid fa-user"></i> Nombre</label>
+        <input type="text" name="nombre" placeholder="Nombre">
 
-      <label>Sobre mí</label>
-      <textarea name="bio" placeholder="Contá algo sobre vos" rows="2"></textarea>
+        <label><i class="fa-solid fa-camera"></i> Foto de perfil (opcional)</label>
+        <input type="file" name="avatarArchivo" accept="image/*">
 
-      <button type="submit">Guardar</button>
-    </form>
+        <label><i class="fa-solid fa-pen-nib"></i> Sobre mí</label>
+        <textarea name="bio" placeholder="Contá algo sobre vos" rows="2"></textarea>
 
-    <h2>Histórico</h2>
-    <section id="historico" class="historico"></section>
-  </main>
+        <button type="submit"><i class="fa-solid fa-check"></i> Guardar</button>
+      </form>
+
+      <h2 style="margin-bottom:14px;display:flex;align-items:center;gap:8px"><i class="fa-solid fa-images" style="color:var(--primary-color)"></i> Histórico</h2>
+      <section id="historico" class="historico"></section>
+    </main>
+  </div>
 
   <script src="assets/js/config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
