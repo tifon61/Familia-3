@@ -114,7 +114,9 @@ function subirArchivo(fileBase64, fileName, mimeType) {
   const archivo = carpeta.createFile(blob);
   archivo.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
   const fileId = archivo.getId();
-  return { fileId, driveUrl: "https://drive.google.com/uc?export=view&id=" + fileId };
+  // El link clásico "uc?export=view" ya no es confiable para incrustar
+  // imágenes (Drive lo bloquea seguido). El endpoint de miniaturas anda mejor.
+  return { fileId, driveUrl: "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1000" };
 }
 
 function crearPublicacion(familiarId, ubicacion, titulo, descripcion, fileBase64, fileName, mimeType) {

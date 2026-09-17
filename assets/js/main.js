@@ -133,9 +133,9 @@ function renderPublicacion(p) {
   const lugar = [p.ciudad, p.pais].filter(Boolean).join(", ");
 
   const media = p.tipo === "video"
-    ? `<video src="${p.driveUrl}" controls></video>`
+    ? `<iframe class="video-embed" src="https://drive.google.com/file/d/${p.fileId}/preview" allow="autoplay" allowfullscreen></iframe>`
     : p.driveUrl
-      ? `<img src="${p.driveUrl}" alt="${p.titulo}">`
+      ? `<img src="${p.driveUrl}" alt="${p.titulo}" loading="lazy">`
       : "";
 
   return `
