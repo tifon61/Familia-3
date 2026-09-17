@@ -171,7 +171,19 @@ function obtenerHoja(nombre, encabezados) {
   if (!sheet) {
     sheet = ss.insertSheet(nombre);
     sheet.appendRow(encabezados);
+    return sheet;
   }
+
+  // Si el código evolucionó (ej: se agregó una columna) pero esta hoja ya
+  // existía con encabezados viejos, los filas nuevas quedarían desalineadas
+  // con las etiquetas. Nos aseguramos de que la fila de encabezados siempre
+  // refleje el orden de columnas que usa el código actual.
+  const encabezadosActuales = sheet.getRange(1, 1, 1, encabezados.length).getValues()[0];
+  const coincide = encabezados.every((h, i) => encabezadosActuales[i] === h);
+  if (!coincide) {
+    sheet.getRange(1, 1, 1, encabezados.length).setValues([encabezados]);
+  }
+
   return sheet;
 }
 
