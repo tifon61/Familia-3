@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { CheckCircle2, XCircle, Copy, Check, Download, Printer, RotateCcw, Award, MapPin, Users, CalendarClock } from 'lucide-react'
+import { CheckCircle2, XCircle, Copy, Check, Download, Printer, RotateCcw, Award, MapPin, Users, CalendarClock, WifiOff, Loader2 } from 'lucide-react'
 import { escenarios } from '../data/escenarios'
 import { acentos } from '../data/estilos'
 import { calcularPuntaje, formatearFecha, generarTextoReporte, nombreArchivo } from '../utils/reporte'
 
 // Pantalla de éxito: resumen de todo lo respondido + copiar / descargar / imprimir.
-export default function Reporte({ participante, respuestas, enviadoEn, onNuevaActividad }) {
+export default function Reporte({ participante, respuestas, enviadoEn, estadoEnvio, enviando, onReintentar, onNuevaActividad }) {
   const [copiado, setCopiado] = useState(false)
   const { correctas, total } = calcularPuntaje(respuestas)
   const texto = generarTextoReporte({ participante, respuestas, enviadoEn })
@@ -44,10 +44,23 @@ export default function Reporte({ participante, respuestas, enviadoEn, onNuevaAc
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20 ring-4 ring-emerald-500/20">
           <CheckCircle2 className="h-9 w-9 text-emerald-300" />
         </span>
-        <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">¡Reporte enviado con éxito!</h2>
+        <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">
+          {estadoEnvio === 'enviado' ? '¡Reporte enviado con éxito!' : '¡Actividad completada!'}
+        </h2>
         <p className="mx-auto mt-2 max-w-xl text-slate-300">
-          Completaste las 4 situaciones operativas. Guardá o compartí el reporte para entregarlo al equipo del taller.
+          {estadoEnvio === 'enviado'
+            ? 'Tus respuestas llegaron al equipo del taller. Igual podés guardarte una copia.'
+            : 'Completaste las 4 situaciones operativas. Guardá o compartí el reporte para entregarlo al equipo del taller.'}
         </p>
+        {estadoEnvio === 'error' && (
+          <div className="mx-auto mt-5 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100 sm:flex-row sm:text-left">
+            <WifiOff className="h-5 w-5 shrink-0 text-amber-300" />
+            <p className="flex-1">No se pudo enviar por internet. Reintentá cuando tengas señal, o copiá / descargá el reporte y mandalo por otro medio.</p>
+            <button onClick={onReintentar} disabled={enviando} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 font-semibold text-slate-950 transition hover:bg-amber-400 disabled:opacity-60">
+              {enviando && <Loader2 className="h-4 w-4 animate-spin" />} Reintentar envío
+            </button>
+          </div>
+        )}
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <button onClick={copiar} className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-500">
             {copiado ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}

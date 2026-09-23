@@ -1,10 +1,10 @@
-import { CheckCircle2, Circle, CircleDashed, ChevronRight, Send, Info, MapPin, Users, Lock, RotateCcw } from 'lucide-react'
+import { CheckCircle2, Circle, CircleDashed, ChevronRight, Send, Info, MapPin, Users, Lock, RotateCcw, Loader2 } from 'lucide-react'
 import { escenarios, preguntaRespondida } from '../data/escenarios'
 import { acentos } from '../data/estilos'
 
 // Dashboard: muestra las 4 situaciones con su estado y habilita el envío
 // cuando todas están completas.
-export default function Panel({ participante, respuestas, completadas, onAbrir, onEnviar, onReiniciar }) {
+export default function Panel({ participante, respuestas, completadas, enviando, onAbrir, onEnviar, onReiniciar }) {
   const cantidad = escenarios.filter((e) => completadas[e.id]).length
   const todas = cantidad === escenarios.length
   const porcentaje = Math.round((cantidad / escenarios.length) * 100)
@@ -57,11 +57,11 @@ export default function Panel({ participante, respuestas, completadas, onAbrir, 
       <div className="mt-8 flex flex-col items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 text-center">
         <button
           onClick={onEnviar}
-          disabled={!todas}
+          disabled={!todas || enviando}
           className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400 disabled:shadow-none"
         >
-          {todas ? <Send className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-          Enviar Reporte
+          {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : todas ? <Send className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+          {enviando ? 'Enviando…' : 'Enviar Reporte'}
         </button>
         <p className="text-xs text-slate-500">
           {todas ? 'Todo listo. Revisá tus respuestas si querés y enviá el reporte.' : `Faltan ${escenarios.length - cantidad} situación(es) para habilitar el envío.`}

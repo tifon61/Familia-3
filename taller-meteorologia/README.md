@@ -15,6 +15,29 @@ npm run dev      # servidor de desarrollo con recarga automática
 npm run build    # genera la versión final en ../meteo
 ```
 
+El build genera **un solo `index.html`** (con el JS y el CSS adentro) más la
+carpeta `imagenes/`. Para publicarla en otro repositorio alcanza con subir esas
+dos cosas a mano.
+
+## Configurar sin programar
+
+Arriba de todo en el `index.html` publicado hay un bloque editable:
+
+```js
+window.CONFIG_TALLER = {
+  formspree: '',                 // ej. 'https://formspree.io/f/abcdwxyz'
+  carpetaImagenes: './imagenes/',
+}
+```
+
+- **formspree:** si se completa, al tocar "Enviar Reporte" las respuestas llegan
+  por mail a la cuenta de Formspree. Si falla (sin señal), la app avisa y ofrece
+  reintentar o copiar/descargar el reporte. Vacío = no se envía nada.
+- **Imágenes:** en `imagenes/` se ponen `logo.png` y `situacion-1.jpg` …
+  `situacion-4.jpg` (ver `imagenes/LEEME.txt`). Las que no estén no se muestran.
+- **Localidades del desplegable:** `src/data/localidades.js` (esto sí requiere
+  volver a compilar).
+
 La versión compilada se guarda en la carpeta `meteo/` de la raíz del repo, así
 GitHub Pages la sirve directamente en `https://<usuario>.github.io/<repo>/meteo/`
 sin necesitar un paso de compilación en el servidor. **Después de cambiar el
@@ -29,6 +52,7 @@ src/
   data/
     escenarios.js          TODO el contenido: contextos, preguntas, opciones y correctas
     estilos.js             colores de acento de cada situación
+    localidades.js         lista del desplegable de localidades
   components/
     Encabezado.jsx         título + espacio para el logo (clic para cargarlo)
     Inicio.jsx             formulario de nombre y base operativa
@@ -39,6 +63,8 @@ src/
   utils/
     almacenamiento.js      guarda el progreso en el navegador (localStorage)
     reporte.js             arma el reporte en texto plano y calcula el puntaje
+    config.js              lee la configuración escrita en el index.html
+    envio.js               manda el reporte a Formspree (fetch + async/await)
 ```
 
 ### Ideas clave para entender el código

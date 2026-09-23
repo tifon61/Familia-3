@@ -6,6 +6,7 @@ import ModalEscenario from './components/ModalEscenario'
 import Reporte from './components/Reporte'
 import { escenarios, escenarioCompleto } from './data/escenarios'
 import { borrarEstado, cargarEstado, guardarEstado } from './utils/almacenamiento'
+import { enviarReporte } from './utils/envio'
 
 // Estado inicial de la actividad. Todo lo que la app "recuerda" está acá:
 //   pantalla:     'inicio' | 'panel' | 'reporte'
@@ -18,6 +19,7 @@ const estadoVacio = {
   respuestas: {},
   completadas: {},
   enviadoEn: null,
+  estadoEnvio: null, // 'enviado' | 'error' | 'local'
   logo: null,
 }
 
@@ -26,6 +28,7 @@ export default function App() {
   // progreso guardado (si existe) en lugar de arrancar de cero.
   const [estado, setEstado] = useState(() => ({ ...estadoVacio, ...cargarEstado() }))
   const [abierto, setAbierto] = useState(null) // id del escenario en el modal
+  const [enviando, setEnviando] = useState(false)
 
   // Cada vez que cambia el estado, lo guardamos en el navegador.
   useEffect(() => guardarEstado(estado), [estado])
@@ -50,6 +53,15 @@ export default function App() {
       }
       return { ...prev, respuestas, completadas }
     })
+  }
+
+  // async/await: esperamos la respuesta del servidor antes de seguir.
+  async function enviar() {
+    setEnviando(true)
+    const enviadoEn = estado.enviadoEn ?? new Date().toISOString()
+    const estadoEnvio = await enviarReporte({ participante: estado.participante, respuestas: estado.respuestas, enviadoEn })
+    setEnviando(false)
+    actualizar({ pantalla: 'reporte', enviadoEn, estadoEnvio })
   }
 
   function reiniciar() {
@@ -80,7 +92,8 @@ export default function App() {
           respuestas={estado.respuestas}
           completadas={estado.completadas}
           onAbrir={setAbierto}
-          onEnviar={() => actualizar({ pantalla: 'reporte', enviadoEn: new Date().toISOString() })}
+          enviando={enviando}
+          onEnviar={enviar}
           onReiniciar={reiniciar}
         />
       )}
@@ -90,6 +103,9 @@ export default function App() {
           participante={estado.participante}
           respuestas={estado.respuestas}
           enviadoEn={estado.enviadoEn}
+          estadoEnvio={estado.estadoEnvio}
+          enviando={enviando}
+          onReintentar={enviar}
           onNuevaActividad={reiniciar}
         />
       )}

@@ -1,11 +1,16 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { CloudSun, ImagePlus } from 'lucide-react'
+import { imagenes } from '../utils/config'
 
 // Encabezado fijo con el título y el espacio para el logo del grupo.
-// El logo se puede cargar haciendo clic: se lee como "data URL" (la imagen
+// Si existe imagenes/logo.png junto al index.html, se usa ese. Si no, el logo
+// se puede cargar haciendo clic: se lee como "data URL" (la imagen
 // convertida a texto) y se guarda junto con el resto del estado.
-export default function Encabezado({ logo, onCambiarLogo }) {
+export default function Encabezado({ logo: logoCargado, onCambiarLogo }) {
   const input = useRef(null)
+  const [sinLogoFijo, setSinLogoFijo] = useState(false)
+  // Prioridad: el que cargó la persona > el archivo fijo > ninguno
+  const logo = logoCargado ?? (sinLogoFijo ? null : imagenes.logo)
 
   function alElegirArchivo(e) {
     const archivo = e.target.files?.[0]
@@ -26,7 +31,12 @@ export default function Encabezado({ logo, onCambiarLogo }) {
           aria-label="Logo del Grupo de Pronóstico"
         >
           {logo ? (
-            <img src={logo} alt="Logo del Grupo de Pronóstico" className="h-full w-full object-contain p-1" />
+            <img
+              src={logo}
+              alt="Logo del Grupo de Pronóstico"
+              className="h-full w-full object-contain p-1"
+              onError={() => setSinLogoFijo(true)} // el archivo no existe
+            />
           ) : (
             <ImagePlus className="h-5 w-5 text-slate-500 transition group-hover:text-sky-300" />
           )}

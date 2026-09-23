@@ -6,6 +6,19 @@
     <meta name="theme-color" content="#020617" />
     <title>Taller de Información Meteorológica</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛈️</text></svg>" />
+    <!--
+      CONFIGURACIÓN: se puede editar a mano directamente en el index.html
+      publicado, sin volver a compilar.
+    -->
+    <script>
+      window.CONFIG_TALLER = {
+        // Dirección de Formspree para recibir los reportes por mail.
+        // Ej.: 'https://formspree.io/f/abcdwxyz'. Vacío = no se envía nada.
+        formspree: '',
+        // Carpeta donde están el logo y las imágenes de las situaciones.
+        carpetaImagenes: './imagenes/',
+      }
+    </script>
   </head>
   <body class="bg-slate-950">
     <div id="root"></div>

@@ -1,20 +1,26 @@
 import { useState } from 'react'
-import { ArrowRight, MapPin, Users, ShieldAlert, Flame, Thermometer, Wind } from 'lucide-react'
+import { ArrowRight, MapPin, Users, ShieldAlert, Flame, Thermometer, Wind, ChevronDown } from 'lucide-react'
+import { localidades, OTRA } from '../data/localidades'
 
 // Pantalla de inicio: pide los datos obligatorios antes de habilitar el panel.
 export default function Inicio({ datosIniciales, onComenzar }) {
   const [nombre, setNombre] = useState(datosIniciales?.nombre ?? '')
-  const [localidad, setLocalidad] = useState(datosIniciales?.localidad ?? '')
+  // Si la localidad guardada no está en la lista, es porque eligieron "Otra"
+  const inicial = datosIniciales?.localidad ?? ''
+  const enLista = inicial === '' || localidades.includes(inicial)
+  const [seleccion, setSeleccion] = useState(enLista ? inicial : OTRA)
+  const [otra, setOtra] = useState(enLista ? '' : inicial)
   const [intentado, setIntentado] = useState(false)
 
+  const localidad = seleccion === OTRA ? otra.trim() : seleccion
   const errorNombre = nombre.trim().length < 3
-  const errorLocalidad = localidad.trim().length < 2
+  const errorLocalidad = localidad.length < 2
 
   function enviar(e) {
     e.preventDefault() // evita que el navegador recargue la página
     setIntentado(true)
     if (errorNombre || errorLocalidad) return
-    onComenzar({ nombre: nombre.trim(), localidad: localidad.trim() })
+    onComenzar({ nombre: nombre.trim(), localidad })
   }
 
   return (
@@ -57,15 +63,42 @@ export default function Inicio({ datosIniciales, onComenzar }) {
           placeholder="Ej.: Ana Pérez, Juan Gómez"
           error={intentado && errorNombre ? 'Ingresá al menos un nombre (mínimo 3 letras).' : null}
         />
-        <Campo
-          id="localidad"
-          etiqueta="Localidad / Base operativa"
-          Icono={MapPin}
-          valor={localidad}
-          onCambio={setLocalidad}
-          placeholder="Ej.: Base El Bolsón"
-          error={intentado && errorLocalidad ? 'Indicá la localidad o base operativa.' : null}
-        />
+        <div className="mt-5">
+          <label htmlFor="localidad" className="mb-1.5 block text-sm font-medium text-slate-200">
+            Localidad / Base operativa <span className="text-orange-400">*</span>
+          </label>
+          <div className="relative">
+            <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <select
+              id="localidad"
+              value={seleccion}
+              onChange={(e) => setSeleccion(e.target.value)}
+              aria-invalid={intentado && errorLocalidad}
+              className={`w-full appearance-none rounded-xl border bg-slate-950 py-3 pl-10 pr-10 focus:outline-none focus:ring-2 ${seleccion ? 'text-white' : 'text-slate-500'} ${
+                intentado && errorLocalidad && seleccion !== OTRA ? 'border-red-500/70 focus:ring-red-400/50' : 'border-slate-700 focus:border-sky-500 focus:ring-sky-500/40'
+              }`}
+            >
+              <option value="">Seleccioná tu localidad…</option>
+              {localidades.map((l) => <option key={l} value={l}>{l}</option>)}
+              <option value={OTRA}>Otra (escribirla)</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          </div>
+          {intentado && errorLocalidad && seleccion !== OTRA && (
+            <p className="mt-1.5 text-xs text-red-400">Elegí la localidad o base operativa.</p>
+          )}
+        </div>
+        {seleccion === OTRA && (
+          <Campo
+            id="localidad-otra"
+            etiqueta="¿Cuál?"
+            Icono={MapPin}
+            valor={otra}
+            onCambio={setOtra}
+            placeholder="Escribí tu localidad o base"
+            error={intentado && errorLocalidad ? 'Escribí el nombre de la localidad.' : null}
+          />
+        )}
 
         <button
           type="submit"

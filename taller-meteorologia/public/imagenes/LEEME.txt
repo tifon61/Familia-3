@@ -1,0 +1,14 @@
+IMÁGENES DE LA ACTIVIDAD
+========================
+
+Poné en esta carpeta las imágenes con EXACTAMENTE estos nombres
+(minúsculas, sin espacios ni tildes). Si una no está, la app simplemente
+no la muestra.
+
+  logo.png           Logo del Grupo de Pronóstico (arriba a la izquierda)
+  situacion-1.jpg    Imagen de la Situación 1 (Frente frío)
+  situacion-2.jpg    Imagen de la Situación 2 (Alta post frontal / mapa sinóptico)
+  situacion-3.jpg    Imagen de la Situación 3 (Valle)
+  situacion-4.jpg    Imagen de la Situación 4 (Tormenta seca)
+
+Consejo: que pesen menos de 500 KB cada una (en el campo hay poca señal).

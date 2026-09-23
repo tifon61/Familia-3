@@ -3,6 +3,7 @@ import { X, CheckCircle2, XCircle, Save, ClipboardList, AlertTriangle, Lightbulb
 import VisualEscenario from './Visuales'
 import { MINIMO_CARACTERES, escenarioCompleto, preguntaRespondida } from '../data/escenarios'
 import { acentos } from '../data/estilos'
+import { imagenes } from '../utils/config'
 
 // Vista de detalle de una situación. Las respuestas se guardan en el estado
 // global a medida que se escriben (autoguardado); el botón final valida que
@@ -88,6 +89,7 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
                 </div>
               ))}
             </dl>
+            <ImagenOpcional key={escenario.id} src={imagenes.situacion(escenario.numero)} alt={`Imagen de referencia: ${escenario.titulo}`} />
             <VisualEscenario tipo={escenario.visual} />
           </section>
 
@@ -122,6 +124,18 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
         </div>
       </div>
     </div>
+  )
+}
+
+// Muestra una imagen real (satélite, carta sinóptica, foto) solo si el archivo
+// existe. Si no existe, onError la oculta y no queda un ícono de imagen rota.
+function ImagenOpcional({ src, alt }) {
+  const [existe, setExiste] = useState(true)
+  if (!existe) return null
+  return (
+    <a href={src} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900" title="Abrir imagen en tamaño completo">
+      <img src={src} alt={alt} loading="lazy" onError={() => setExiste(false)} className="block h-auto w-full" />
+    </a>
   )
 }
 
