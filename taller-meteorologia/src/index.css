@@ -1,22 +1,43 @@
 @import "tailwindcss";
 
-/* Fondo con una trama sutil tipo carta meteorológica */
+/*
+  Paleta del Grupo de Pronóstico. Con @theme, Tailwind crea clases a partir de
+  estas variables: --color-primario habilita bg-primario, text-primario,
+  border-primario, etc. Cambiando un valor acá, cambia en toda la app.
+*/
+@theme {
+  --color-primario: #003f6b;
+  --color-primario-medio: #005a99;
+  --color-primario-oscuro: #001f35;
+  --color-secundario: #6ba4d6;
+  --color-secundario-claro: #c9e1f0;
+  --color-celeste-suave: #deeef9;
+  --color-verde: #00796b;
+  --color-fondo: #eef2f7;
+  --color-texto: #1e293b;
+  --color-apagado: #64748b;
+  --color-borde: #dde4ed;
+  --color-acento: #0ea5e9;
+  --color-peligro: #ef4444;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-titulo: 'Montserrat', 'Inter', system-ui, sans-serif;
+}
+
 body {
-  background-color: #020617;
-  background-image:
-    radial-gradient(circle at 15% 0%, rgba(14, 165, 233, 0.12), transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(249, 115, 22, 0.10), transparent 35%),
-    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
-  background-size: auto, auto, 32px 32px, 32px 32px;
+  background: var(--color-fondo);
+  color: var(--color-texto);
   min-height: 100vh;
 }
 
 @keyframes aparecer {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animar-entrada { animation: aparecer 0.35s ease-out both; }
+.animar-entrada { animation: aparecer 0.35s ease both; }
+
+@keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.flotar { animation: flotar 3.2s ease-in-out infinite; }
 
 /* Animaciones de los esquemas SVG */
 @keyframes fluir { to { stroke-dashoffset: -24; } }
@@ -26,13 +47,12 @@ body {
 .rayo { animation: destello 3.5s infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .flujo, .rayo, .animar-entrada { animation: none; }
+  .flujo, .rayo, .animar-entrada, .flotar { animation: none; }
 }
 
 /* Al imprimir el reporte ocultamos todo lo que no sea el reporte */
 @media print {
   body { background: #fff !important; }
   .no-imprimir { display: none !important; }
-  .solo-reporte { background: #fff !important; box-shadow: none !important; border: none !important; }
-  .solo-reporte * { color: #000 !important; background: transparent !important; }
+  .solo-reporte { box-shadow: none !important; border: none !important; }
 }

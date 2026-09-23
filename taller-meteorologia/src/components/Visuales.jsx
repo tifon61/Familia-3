@@ -12,12 +12,14 @@ function Flecha({ id, color }) {
 
 function Lienzo({ titulo, children, leyenda }) {
   return (
-    <figure className="overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900">
+    // Panel azul oscuro (degradé de la paleta institucional) para que los
+    // colores del esquema resalten, como el banner de modelos de la página.
+    <figure className="overflow-hidden rounded-2xl bg-gradient-to-br from-primario to-primario-oscuro shadow-[0_8px_28px_rgba(0,63,107,0.3)]">
       <svg viewBox="0 0 400 260" className="block h-auto w-full" role="img" aria-label={titulo}>
         {children}
       </svg>
-      <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-slate-700/60 px-3 py-2 text-xs text-slate-400">
-        <span className="font-medium text-slate-300">{titulo}</span>
+      <figcaption className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/15 bg-primario-oscuro/60 px-4 py-2.5 text-xs font-semibold text-white/75">
+        <span className="font-extrabold uppercase tracking-wide text-white">{titulo}</span>
         {leyenda}
       </figcaption>
     </figure>

@@ -5,7 +5,9 @@ Poné en esta carpeta las imágenes con EXACTAMENTE estos nombres
 (minúsculas, sin espacios ni tildes). Si una no está, la app simplemente
 no la muestra.
 
-  logo.png           Logo del Grupo de Pronóstico (arriba a la izquierda)
+  logo.png           Logo del Grupo de Pronóstico (redondo, arriba a la izquierda)
+  logo-institucion.png  Logo de la facultad/institución (al lado del anterior)
+  fondo.jpg          Foto de fondo de la pantalla de inicio (se ve con un velo azul)
   situacion-1.jpg    Imagen de la Situación 1 (Frente frío)
   situacion-2.jpg    Imagen de la Situación 2 (Alta post frontal / mapa sinóptico)
   situacion-3.jpg    Imagen de la Situación 3 (Valle)

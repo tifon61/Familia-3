@@ -3,6 +3,7 @@ import { CheckCircle2, XCircle, Copy, Check, Download, Printer, RotateCcw, Award
 import { escenarios } from '../data/escenarios'
 import { acentos } from '../data/estilos'
 import { calcularPuntaje, formatearFecha, generarTextoReporte, nombreArchivo } from '../utils/reporte'
+import { INSTITUCION } from '../utils/config'
 
 // Pantalla de éxito: resumen de todo lo respondido + copiar / descargar / imprimir.
 export default function Reporte({ participante, respuestas, enviadoEn, estadoEnvio, enviando, onReintentar, onNuevaActividad }) {
@@ -39,48 +40,51 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
   }
 
   return (
-    <main className="animar-entrada mx-auto max-w-4xl px-4 py-8">
-      <section className="no-imprimir rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 to-slate-900 p-6 text-center sm:p-10">
-        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/20 ring-4 ring-emerald-500/20">
-          <CheckCircle2 className="h-9 w-9 text-emerald-300" />
+    <main className="animar-entrada mx-auto max-w-4xl px-4 py-6 sm:py-8">
+      {/* Banner de éxito */}
+      <section className="no-imprimir rounded-2xl bg-gradient-to-br from-primario to-primario-oscuro p-6 text-center text-white shadow-[0_8px_28px_rgba(0,63,107,0.3)] sm:p-10">
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white/15 ring-4 ring-white/10">
+          <CheckCircle2 className="h-9 w-9 text-white" />
         </span>
-        <h2 className="mt-4 text-2xl font-extrabold text-white sm:text-3xl">
+        <h2 className="mt-4 font-titulo text-2xl font-black uppercase tracking-tight sm:text-4xl">
           {estadoEnvio === 'enviado' ? '¡Reporte enviado con éxito!' : '¡Actividad completada!'}
         </h2>
-        <p className="mx-auto mt-2 max-w-xl text-slate-300">
+        <p className="mx-auto mt-2 max-w-xl text-white/85">
           {estadoEnvio === 'enviado'
             ? 'Tus respuestas llegaron al equipo del taller. Igual podés guardarte una copia.'
             : 'Completaste las 4 situaciones operativas. Guardá o compartí el reporte para entregarlo al equipo del taller.'}
         </p>
         {estadoEnvio === 'error' && (
-          <div className="mx-auto mt-5 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100 sm:flex-row sm:text-left">
-            <WifiOff className="h-5 w-5 shrink-0 text-amber-300" />
+          <div className="mx-auto mt-5 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-[#fde68a] border-l-4 border-l-[#f59e0b] bg-[#fffbeb] p-4 text-sm font-semibold text-[#78350f] sm:flex-row sm:text-left">
+            <WifiOff className="h-5 w-5 shrink-0 text-[#b45309]" />
             <p className="flex-1">No se pudo enviar por internet. Reintentá cuando tengas señal, o copiá / descargá el reporte y mandalo por otro medio.</p>
-            <button onClick={onReintentar} disabled={enviando} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 font-semibold text-slate-950 transition hover:bg-amber-400 disabled:opacity-60">
+            <button onClick={onReintentar} disabled={enviando} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#f59e0b] px-3 py-2 font-extrabold text-white transition hover:brightness-110 disabled:opacity-60">
               {enviando && <Loader2 className="h-4 w-4 animate-spin" />} Reintentar envío
             </button>
           </div>
         )}
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <button onClick={copiar} className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-500">
+          <button onClick={copiar} className="inline-flex items-center justify-center gap-2 rounded-lg bg-acento px-5 py-3 text-sm font-extrabold text-white transition hover:bg-[#0284c7]">
             {copiado ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             {copiado ? '¡Copiado!' : 'Copiar reporte'}
           </button>
-          <button onClick={descargar} className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-500">
+          <button onClick={descargar} className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-extrabold text-primario transition hover:bg-fondo">
             <Download className="h-4 w-4" /> Descargar .txt
           </button>
-          <button onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:bg-slate-800">
+          <button onClick={() => window.print()} className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-5 py-3 text-sm font-extrabold text-white transition hover:bg-white/20">
             <Printer className="h-4 w-4" /> Imprimir / PDF
           </button>
         </div>
       </section>
 
       {/* Resumen visible (y lo único que sale al imprimir) */}
-      <article className="solo-reporte mt-8 rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-8">
-        <header className="border-b border-slate-800 pb-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-orange-400">Taller de Información Meteorológica - Actividad Final</p>
-          <h3 className="mt-1 text-xl font-bold text-white">Reporte de situaciones operativas</h3>
-          <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+      <article className="solo-reporte mt-6 overflow-hidden rounded-2xl border border-borde bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+        <header className="border-b-[3px] border-primario p-5 sm:p-8">
+          <p className="text-[0.7rem] font-extrabold uppercase tracking-wide text-apagado">{INSTITUCION} · Taller de Información Meteorológica</p>
+          <h3 className="mt-1 inline-block border-b-[3px] border-secundario pb-1 font-titulo text-xl font-black text-primario sm:text-2xl">
+            Reporte de situaciones operativas
+          </h3>
+          <div className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
             <Dato Icono={Users} etiqueta="Brigadista / participantes" valor={participante.nombre} />
             <Dato Icono={MapPin} etiqueta="Localidad / base operativa" valor={participante.localidad} />
             <Dato Icono={CalendarClock} etiqueta="Fecha de envío" valor={formatearFecha(enviadoEn)} />
@@ -89,10 +93,12 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
         </header>
 
         {escenarios.map((esc) => (
-          <section key={esc.id} className="border-b border-slate-800 py-6 last:border-0 last:pb-0">
-            <p className={`text-xs font-semibold uppercase tracking-wider ${acentos[esc.acento].texto}`}>Situación {esc.numero}</p>
-            <h4 className="text-lg font-bold text-white">{esc.titulo}</h4>
-            <div className="mt-4 space-y-4">
+          <section key={esc.id} className="border-b border-borde last:border-0">
+            <div className={`flex items-center gap-2 px-5 py-2.5 text-white sm:px-8 ${acentos[esc.acento].cabecera}`}>
+              <span className="font-titulo text-sm font-black uppercase">Situación {esc.numero}</span>
+              <span className="text-sm font-semibold text-white/85">· {esc.titulo}</span>
+            </div>
+            <div className="space-y-4 p-5 sm:px-8">
               {esc.preguntas.map((p) => (
                 <RespuestaResumen key={p.id} pregunta={p} valor={respuestas[esc.id]?.[p.id]} />
               ))}
@@ -101,8 +107,8 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
         ))}
       </article>
 
-      <div className="no-imprimir mt-8 text-center">
-        <button onClick={onNuevaActividad} className="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-white">
+      <div className="no-imprimir mt-6 text-center">
+        <button onClick={onNuevaActividad} className="inline-flex items-center gap-2 text-sm font-semibold text-apagado transition hover:text-primario">
           <RotateCcw className="h-4 w-4" /> Comenzar una nueva actividad
         </button>
       </div>
@@ -112,25 +118,30 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
 
 function Dato({ Icono, etiqueta, valor }) {
   return (
-    <div className="flex items-start gap-2">
-      <Icono className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" />
+    <div className="flex items-start gap-2.5 rounded-xl bg-celeste-suave px-3 py-2.5">
+      <Icono className="mt-0.5 h-4 w-4 shrink-0 text-primario" />
       <div>
-        <p className="text-xs text-slate-500">{etiqueta}</p>
-        <p className="font-medium text-slate-100">{valor}</p>
+        <p className="text-[0.66rem] font-extrabold uppercase tracking-wide text-apagado">{etiqueta}</p>
+        <p className="font-bold text-primario">{valor}</p>
       </div>
     </div>
   )
 }
 
 function RespuestaResumen({ pregunta, valor }) {
+  const encabezado = (
+    <p className="text-sm font-semibold text-texto">
+      <span className="font-extrabold uppercase text-apagado">{pregunta.etiqueta}:</span> {pregunta.enunciado}
+    </p>
+  )
   if (pregunta.tipo === 'opcion') {
     const elegida = pregunta.opciones.find((o) => o.id === valor)
     const ok = valor === pregunta.correcta
     return (
       <div>
-        <p className="text-sm font-medium text-slate-300"><span className="text-slate-500">{pregunta.etiqueta}:</span> {pregunta.enunciado}</p>
-        <p className={`mt-1 flex items-start gap-2 rounded-lg px-3 py-2 text-sm ${ok ? 'bg-emerald-500/10 text-emerald-100' : 'bg-red-500/10 text-red-100'}`}>
-          {ok ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />}
+        {encabezado}
+        <p className={`mt-1.5 flex items-start gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${ok ? 'bg-[#e0f2f1] text-[#004d40]' : 'bg-[#fef2f2] text-[#991b1b]'}`}>
+          {ok ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-verde" /> : <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-peligro" />}
           {elegida?.texto}
         </p>
       </div>
@@ -138,8 +149,8 @@ function RespuestaResumen({ pregunta, valor }) {
   }
   return (
     <div>
-      <p className="text-sm font-medium text-slate-300"><span className="text-slate-500">{pregunta.etiqueta}:</span> {pregunta.enunciado}</p>
-      <p className="mt-1 whitespace-pre-wrap rounded-lg bg-slate-950 px-3 py-2 text-sm text-slate-100">{valor}</p>
+      {encabezado}
+      <p className="mt-1.5 whitespace-pre-wrap rounded-lg border border-borde bg-fondo px-3 py-2 text-sm text-texto">{valor}</p>
     </div>
   )
 }

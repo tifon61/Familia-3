@@ -33,7 +33,9 @@ window.CONFIG_TALLER = {
 - **formspree:** si se completa, al tocar "Enviar Reporte" las respuestas llegan
   por mail a la cuenta de Formspree. Si falla (sin señal), la app avisa y ofrece
   reintentar o copiar/descargar el reporte. Vacío = no se envía nada.
-- **Imágenes:** en `imagenes/` se ponen `logo.png` y `situacion-1.jpg` …
+- **institucion:** el nombre que aparece debajo del título.
+- **Imágenes:** en `imagenes/` se ponen `logo.png`, `logo-institucion.png`,
+  `fondo.jpg` y `situacion-1.jpg` …
   `situacion-4.jpg` (ver `imagenes/LEEME.txt`). Las que no estén no se muestran.
 - **Localidades del desplegable:** `src/data/localidades.js` (esto sí requiere
   volver a compilar).
@@ -51,7 +53,7 @@ src/
   App.jsx                  estado global y qué pantalla se muestra
   data/
     escenarios.js          TODO el contenido: contextos, preguntas, opciones y correctas
-    estilos.js             colores de acento de cada situación
+    estilos.js             color de cada situación (dentro de la paleta)
     localidades.js         lista del desplegable de localidades
   components/
     Encabezado.jsx         título + espacio para el logo (clic para cargarlo)
@@ -82,6 +84,10 @@ src/
   al menos 20 caracteres). Recién ahí se muestra la corrección de las
   preguntas de opción múltiple, con una explicación, y esas opciones quedan
   bloqueadas.
+- **Paleta en un solo lugar.** Los colores del Grupo de Pronóstico están en
+  `src/index.css` dentro de `@theme` (`--color-primario: #003f6b`, etc.).
+  Tailwind convierte cada uno en clases (`bg-primario`, `text-primario`…), así
+  que para ajustar un color alcanza con cambiarlo ahí.
 - **Tailwind y clases dinámicas.** Tailwind solo incluye las clases que ve
   escritas completas, por eso los colores por situación están listados en
   `estilos.js` en lugar de armarse con `` `text-${color}-400` ``.

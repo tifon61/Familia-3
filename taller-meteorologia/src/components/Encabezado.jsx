@@ -1,14 +1,17 @@
 import { useRef, useState } from 'react'
-import { CloudSun, ImagePlus } from 'lucide-react'
-import { imagenes } from '../utils/config'
+import { ImagePlus } from 'lucide-react'
+import { imagenes, INSTITUCION } from '../utils/config'
 
-// Encabezado fijo con el título y el espacio para el logo del grupo.
-// Si existe imagenes/logo.png junto al index.html, se usa ese. Si no, el logo
-// se puede cargar haciendo clic: se lee como "data URL" (la imagen
-// convertida a texto) y se guarda junto con el resto del estado.
+// Encabezado blanco con la línea azul inferior, igual que la página del Grupo
+// de Pronóstico.
+// - Logo del grupo: si existe imagenes/logo.png se usa ese; si no, se puede
+//   cargar haciendo clic (se lee como "data URL" y se guarda con el estado).
+// - Logo de la institución (imagenes/logo-institucion.png): opcional, solo
+//   aparece si el archivo existe.
 export default function Encabezado({ logo: logoCargado, onCambiarLogo }) {
   const input = useRef(null)
   const [sinLogoFijo, setSinLogoFijo] = useState(false)
+  const [sinLogoInstitucion, setSinLogoInstitucion] = useState(false)
   // Prioridad: el que cargó la persona > el archivo fijo > ninguno
   const logo = logoCargado ?? (sinLogoFijo ? null : imagenes.logo)
 
@@ -21,12 +24,21 @@ export default function Encabezado({ logo: logoCargado, onCambiarLogo }) {
   }
 
   return (
-    <header className="no-imprimir sticky top-0 z-30 border-b border-slate-800 bg-slate-950/85 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:gap-4">
+    <header className="no-imprimir sticky top-0 z-30 border-b-[3px] border-primario bg-white shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+      <div className="mx-auto flex min-h-[66px] max-w-6xl items-center gap-3 px-4 py-2 sm:gap-4 sm:px-8">
+        {!sinLogoInstitucion && (
+          <img
+            src={imagenes.logoInstitucion}
+            alt="Institución"
+            className="hidden h-[42px] object-contain sm:block"
+            onError={() => setSinLogoInstitucion(true)}
+          />
+        )}
         <button
           type="button"
           onClick={() => input.current?.click()}
-          className="group relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-dashed border-slate-600 bg-slate-900 transition hover:border-sky-400 sm:h-14 sm:w-14"
+          className="group flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-borde bg-fondo transition hover:border-primario data-[logo=si]:border-0 data-[logo=si]:bg-transparent"
+          data-logo={logo ? 'si' : 'no'}
           title={logo ? 'Cambiar logo' : 'Cargar Logo del Grupo de Pronóstico'}
           aria-label="Logo del Grupo de Pronóstico"
         >
@@ -34,25 +46,25 @@ export default function Encabezado({ logo: logoCargado, onCambiarLogo }) {
             <img
               src={logo}
               alt="Logo del Grupo de Pronóstico"
-              className="h-full w-full object-contain p-1"
+              className="h-full w-full rounded-full object-cover"
               onError={() => setSinLogoFijo(true)} // el archivo no existe
             />
           ) : (
-            <ImagePlus className="h-5 w-5 text-slate-500 transition group-hover:text-sky-300" />
+            <ImagePlus className="h-4 w-4 text-apagado transition group-hover:text-primario" />
           )}
         </button>
         <input ref={input} type="file" accept="image/*" className="hidden" onChange={alElegirArchivo} />
 
         <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-orange-400">
-            <CloudSun className="h-3.5 w-3.5" />
-            {logo ? 'Grupo de Pronóstico' : 'Logo del Grupo de Pronóstico'}
-          </p>
-          <h1 className="truncate text-base font-bold text-white sm:text-xl">
+          <h1 className="truncate font-titulo text-sm font-black uppercase leading-tight tracking-tight text-primario sm:text-[1.1rem]">
             Taller de Información Meteorológica
-            <span className="hidden font-normal text-slate-400 sm:inline"> - Actividad Final</span>
           </h1>
+          <p className="truncate text-[11px] font-semibold text-apagado sm:text-xs">{INSTITUCION}</p>
         </div>
+
+        <span className="hidden shrink-0 rounded-lg bg-primario px-4 py-2 text-[0.8rem] font-bold uppercase tracking-wide text-white md:inline-block">
+          Actividad Final
+        </span>
       </div>
     </header>
   )

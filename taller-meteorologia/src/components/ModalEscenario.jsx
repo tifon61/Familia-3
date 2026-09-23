@@ -41,7 +41,7 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-stretch justify-center bg-slate-950/80 backdrop-blur-sm sm:items-center sm:p-4" onClick={onCerrar}>
+    <div className="fixed inset-0 z-40 flex items-stretch justify-center bg-primario-oscuro/60 backdrop-blur-sm sm:items-center sm:p-4" onClick={onCerrar}>
       <div
         ref={contenedor}
         tabIndex={-1}
@@ -49,52 +49,52 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
         aria-modal="true"
         aria-labelledby="titulo-escenario"
         onClick={(e) => e.stopPropagation()}
-        className="animar-entrada relative w-full max-w-6xl overflow-y-auto bg-slate-950 outline-none sm:max-h-[92vh] sm:rounded-2xl sm:border sm:border-slate-700"
+        className="animar-entrada relative w-full max-w-6xl overflow-y-auto bg-fondo outline-none sm:max-h-[92vh] sm:rounded-2xl sm:shadow-2xl"
       >
-        {/* Cabecera del modal */}
-        <div className="sticky top-0 z-10 flex items-center gap-3 border-b border-slate-800 bg-slate-950/95 px-4 py-3 backdrop-blur sm:px-6">
-          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ring-1 ${estilo.icono}`}>
-            <Icono className="h-5 w-5" />
-          </span>
+        {/* Cabecera del modal, del color de la situación */}
+        <div className={`sticky top-0 z-10 flex items-center gap-3 px-4 py-3.5 text-white sm:px-6 ${estilo.cabecera}`}>
+          <Icono className="h-9 w-9 shrink-0 opacity-90" strokeWidth={1.75} />
           <div className="min-w-0 flex-1">
-            <p className={`text-xs font-semibold uppercase tracking-wider ${estilo.texto}`}>Situación {escenario.numero}</p>
-            <h2 id="titulo-escenario" className="truncate font-bold text-white sm:text-lg">{escenario.titulo}</h2>
+            <p className="text-[0.7rem] font-extrabold uppercase tracking-wide text-white/75">Situación {escenario.numero}</p>
+            <h2 id="titulo-escenario" className="truncate font-titulo text-lg font-black uppercase leading-tight tracking-tight sm:text-2xl">{escenario.titulo}</h2>
           </div>
-          <button onClick={onCerrar} className="rounded-lg p-2 text-slate-400 transition hover:bg-slate-800 hover:text-white" aria-label="Cerrar">
-            <X className="h-5 w-5" />
+          <button onClick={onCerrar} className="rounded-lg p-2 text-white/80 transition hover:bg-white/15 hover:text-white" aria-label="Cerrar">
+            <X className="h-6 w-6" />
           </button>
         </div>
 
         {completada && (
-          <div className="mx-4 mt-4 flex items-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200 sm:mx-6">
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-300" />
+          <div className="mx-4 mt-4 flex items-center gap-2 rounded-xl border border-[#b2dfdb] border-l-4 border-l-verde bg-[#e0f2f1] px-4 py-3 text-sm font-semibold text-verde sm:mx-6">
+            <CheckCircle2 className="h-5 w-5 shrink-0" />
             Situación completada. Abajo vas a ver la corrección de las preguntas de opción múltiple. Podés seguir editando tus respuestas de texto.
           </div>
         )}
 
         <div className="grid gap-6 p-4 sm:p-6 lg:grid-cols-[1fr_1.1fr]">
           {/* Columna izquierda: contexto meteorológico y recursos visuales */}
-          <section className="space-y-4 lg:sticky lg:top-20 lg:self-start">
-            <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-400">
-              <ClipboardList className="h-4 w-4" /> Contexto meteorológico
-            </h3>
-            <div className="space-y-3 text-sm leading-relaxed text-slate-300">
-              {escenario.contexto.map((parrafo, i) => <p key={i}>{parrafo}</p>)}
+          <section className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+            <div className="rounded-2xl border border-borde bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+              <h3 className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide text-primario">
+                <ClipboardList className="h-4 w-4" /> Contexto meteorológico
+              </h3>
+              <div className="mt-3 space-y-3 text-[0.92rem] leading-relaxed text-texto">
+                {escenario.contexto.map((parrafo, i) => <p key={i}>{parrafo}</p>)}
+              </div>
+              <dl className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-celeste-suave p-2">
+                {escenario.datos.map((d) => (
+                  <div key={d.etiqueta} className={`rounded-lg px-3 py-2 ${d.destacado ? 'bg-[#fffbeb] ring-1 ring-[#fde68a]' : 'bg-white/60'}`}>
+                    <dt className="text-[0.66rem] font-extrabold uppercase tracking-wide text-apagado">{d.etiqueta}</dt>
+                    <dd className={`text-base font-extrabold ${d.destacado ? 'text-[#b45309]' : 'text-primario'}`}>{d.valor}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-            <dl className="grid grid-cols-2 gap-2">
-              {escenario.datos.map((d) => (
-                <div key={d.etiqueta} className={`rounded-lg border px-3 py-2 ${d.destacado ? 'border-amber-500/40 bg-amber-500/10' : 'border-slate-800 bg-slate-900'}`}>
-                  <dt className="text-[11px] uppercase tracking-wide text-slate-500">{d.etiqueta}</dt>
-                  <dd className={`font-semibold ${d.destacado ? 'text-amber-200' : 'text-white'}`}>{d.valor}</dd>
-                </div>
-              ))}
-            </dl>
             <ImagenOpcional key={escenario.id} src={imagenes.situacion(escenario.numero)} alt={`Imagen de referencia: ${escenario.titulo}`} />
             <VisualEscenario tipo={escenario.visual} />
           </section>
 
           {/* Columna derecha: formulario */}
-          <section className="space-y-5">
+          <section className="space-y-4">
             {escenario.preguntas.map((p) => (
               <Pregunta
                 key={p.id}
@@ -107,18 +107,18 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
               />
             ))}
 
-            <div className="flex flex-col-reverse gap-3 border-t border-slate-800 pt-5 sm:flex-row sm:justify-end">
-              <button onClick={onCerrar} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 px-5 py-3 text-sm font-medium text-slate-300 transition hover:bg-slate-800">
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+              <button onClick={onCerrar} className="inline-flex items-center justify-center gap-2 rounded-full border border-borde bg-white px-6 py-3 text-sm font-bold text-primario transition hover:bg-fondo">
                 <ArrowLeft className="h-4 w-4" /> Volver al panel
               </button>
               {!completada && (
-                <button onClick={completar} className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-500">
+                <button onClick={completar} className="inline-flex items-center justify-center gap-2 rounded-full bg-primario px-6 py-3 text-sm font-black text-white shadow-[0_6px_18px_rgba(0,63,107,0.3)] transition hover:-translate-y-0.5 hover:bg-primario-medio">
                   <Save className="h-4 w-4" /> Guardar y marcar como completada
                 </button>
               )}
             </div>
             {!completada && (
-              <p className="text-right text-xs text-slate-500">Tus respuestas se guardan automáticamente mientras escribís.</p>
+              <p className="text-right text-xs font-semibold text-apagado">Tus respuestas se guardan automáticamente mientras escribís.</p>
             )}
           </section>
         </div>
@@ -133,7 +133,7 @@ function ImagenOpcional({ src, alt }) {
   const [existe, setExiste] = useState(true)
   if (!existe) return null
   return (
-    <a href={src} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900" title="Abrir imagen en tamaño completo">
+    <a href={src} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-2xl border border-borde bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]" title="Abrir imagen en tamaño completo">
       <img src={src} alt={alt} loading="lazy" onError={() => setExiste(false)} className="block h-auto w-full" />
     </a>
   )
@@ -141,19 +141,22 @@ function ImagenOpcional({ src, alt }) {
 
 function Pregunta({ id, pregunta, valor, onCambio, mostrarCorreccion, mostrarError }) {
   const esDecision = pregunta.etiqueta === 'Decisión operativa'
+  // Decisión operativa: estilo "banner de aviso" ámbar, como en la página
+  // del grupo. El resto: tarjeta blanca.
+  const marco = mostrarError
+    ? 'border-[#fecaca] border-l-4 border-l-peligro bg-[#fef2f2]'
+    : esDecision
+      ? 'border-[#fde68a] border-l-4 border-l-[#f59e0b] bg-[#fffbeb]'
+      : 'border-borde bg-white'
+
   return (
-    <fieldset
-      id={id}
-      className={`rounded-2xl border p-4 sm:p-5 ${
-        mostrarError ? 'border-red-500/60 bg-red-500/5' : esDecision ? 'border-orange-500/40 bg-orange-500/5' : 'border-slate-800 bg-slate-900/70'
-      }`}
-    >
+    <fieldset id={id} className={`rounded-2xl border p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)] sm:p-5 ${marco}`}>
       <legend className="sr-only">{pregunta.etiqueta}</legend>
-      <p className={`flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider ${esDecision ? 'text-orange-300' : 'text-sky-300'}`}>
+      <p className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.7rem] font-extrabold uppercase tracking-wide ${esDecision ? 'bg-[#fef3c7] text-[#b45309]' : 'bg-fondo text-apagado'}`}>
         {esDecision && <AlertTriangle className="h-3.5 w-3.5" />}
         {pregunta.etiqueta} · {pregunta.tipo === 'opcion' ? 'Opción múltiple' : 'Texto libre'}
       </p>
-      <p className="mt-2 font-medium text-white">{pregunta.enunciado}</p>
+      <p className="mt-3 text-[0.98rem] font-bold leading-snug text-texto">{pregunta.enunciado}</p>
 
       {pregunta.tipo === 'opcion' ? (
         <OpcionMultiple id={id} pregunta={pregunta} valor={valor} onCambio={onCambio} mostrarCorreccion={mostrarCorreccion} />
@@ -162,7 +165,7 @@ function Pregunta({ id, pregunta, valor, onCambio, mostrarCorreccion, mostrarErr
       )}
 
       {mostrarError && (
-        <p className="mt-2 text-xs text-red-400">
+        <p className="mt-2 text-xs font-bold text-peligro">
           {pregunta.tipo === 'opcion' ? 'Elegí una opción.' : `Escribí una respuesta de al menos ${MINIMO_CARACTERES} caracteres.`}
         </p>
       )}
@@ -180,13 +183,14 @@ function OpcionMultiple({ id, pregunta, valor, onCambio, mostrarCorreccion }) {
           const esCorrecta = op.id === pregunta.correcta
           // Colores: antes de corregir resaltamos la elegida; después,
           // verde para la correcta y rojo si la elegida era incorrecta.
-          let clases = 'border-slate-700 hover:border-slate-500 hover:bg-slate-800/60'
-          if (mostrarCorreccion && esCorrecta) clases = 'border-emerald-500/70 bg-emerald-500/10'
-          else if (mostrarCorreccion && elegida) clases = 'border-red-500/70 bg-red-500/10'
-          else if (elegida) clases = 'border-sky-500 bg-sky-500/10'
+          let clases = 'border-borde bg-white hover:border-secundario hover:bg-fondo'
+          if (mostrarCorreccion && esCorrecta) clases = 'border-verde bg-[#e0f2f1]'
+          else if (mostrarCorreccion && elegida) clases = 'border-peligro bg-[#fef2f2]'
+          else if (mostrarCorreccion) clases = 'border-borde bg-white opacity-70'
+          else if (elegida) clases = 'border-primario bg-celeste-suave'
 
           return (
-            <label key={op.id} className={`flex items-start gap-3 rounded-xl border p-3 text-sm transition ${clases} ${mostrarCorreccion ? 'cursor-default' : 'cursor-pointer'}`}>
+            <label key={op.id} className={`flex items-start gap-3 rounded-xl border-2 p-3 text-sm transition ${clases} ${mostrarCorreccion ? 'cursor-default' : 'cursor-pointer'}`}>
               <input
                 type="radio"
                 name={id}
@@ -194,18 +198,18 @@ function OpcionMultiple({ id, pregunta, valor, onCambio, mostrarCorreccion }) {
                 checked={elegida}
                 disabled={mostrarCorreccion}
                 onChange={() => onCambio(op.id)}
-                className="mt-0.5 h-4 w-4 shrink-0 accent-sky-500"
+                className="mt-0.5 h-4 w-4 shrink-0 accent-primario"
               />
-              <span className="flex-1 text-slate-200">{op.texto}</span>
-              {mostrarCorreccion && esCorrecta && <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />}
-              {mostrarCorreccion && elegida && !esCorrecta && <XCircle className="h-5 w-5 shrink-0 text-red-400" />}
+              <span className={`flex-1 ${elegida ? 'font-bold text-primario' : 'font-medium text-texto'}`}>{op.texto}</span>
+              {mostrarCorreccion && esCorrecta && <CheckCircle2 className="h-5 w-5 shrink-0 text-verde" />}
+              {mostrarCorreccion && elegida && !esCorrecta && <XCircle className="h-5 w-5 shrink-0 text-peligro" />}
             </label>
           )
         })}
       </div>
       {mostrarCorreccion && (
-        <div className={`mt-3 flex gap-2 rounded-xl p-3 text-sm ${acerto ? 'bg-emerald-500/10 text-emerald-100' : 'bg-amber-500/10 text-amber-100'}`}>
-          <Lightbulb className={`mt-0.5 h-4 w-4 shrink-0 ${acerto ? 'text-emerald-300' : 'text-amber-300'}`} />
+        <div className={`mt-3 flex gap-2 rounded-xl p-3 text-sm leading-relaxed ${acerto ? 'bg-[#e0f2f1] text-[#004d40]' : 'bg-[#fffbeb] text-[#78350f]'}`}>
+          <Lightbulb className={`mt-0.5 h-4 w-4 shrink-0 ${acerto ? 'text-verde' : 'text-[#b45309]'}`} />
           <p><strong>{acerto ? '¡Correcto! ' : 'Para repasar: '}</strong>{pregunta.explicacion}</p>
         </div>
       )}
@@ -225,9 +229,9 @@ function TextoLibre({ id, pregunta, valor, onCambio }) {
         onChange={(e) => onCambio(e.target.value)}
         rows={5}
         placeholder={pregunta.placeholder}
-        className="w-full resize-y rounded-xl border border-slate-700 bg-slate-950 p-3 text-sm leading-relaxed text-white placeholder:text-slate-600 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+        className="w-full resize-y rounded-lg border border-[#cbd5e1] bg-white p-3 text-[0.95rem] leading-relaxed text-texto placeholder:text-apagado/70 focus:border-primario focus:outline-none focus:ring-2 focus:ring-primario/20"
       />
-      <p className={`mt-1 text-right text-xs ${suficiente ? 'text-emerald-400' : 'text-slate-500'}`}>
+      <p className={`mt-1 text-right text-xs font-bold ${suficiente ? 'text-verde' : 'text-apagado'}`}>
         {suficiente ? '✓ ' : ''}{largo} caracteres{suficiente ? '' : ` (mínimo ${MINIMO_CARACTERES})`}
       </p>
     </div>

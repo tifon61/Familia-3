@@ -17,7 +17,7 @@ export const escenarios = [
     titulo: 'Frente Frío con Alerta Temprana',
     resumen: 'Ingreso de un frente frío con viento norte previo y alerta amarilla por vientos post-frontales.',
     icono: Wind,
-    acento: 'sky',
+    acento: 'oscuro',
     visual: 'frente',
     contexto: [
       'Durante la mañana se registra viento del sector norte, cálido y seco, con temperaturas elevadas y humedad relativa en descenso. El pronóstico indica el ingreso de un frente frío desde el sudoeste durante la tarde.',
@@ -66,7 +66,7 @@ export const escenarios = [
     titulo: 'Alta Presión Post Frontal',
     resumen: 'Sistema de alta presión posicionado detrás del frente. Analizá el mapa sinóptico de presión.',
     icono: Gauge,
-    acento: 'indigo',
+    acento: 'celeste',
     visual: 'alta',
     contexto: [
       'Tras el pasaje del frente, un sistema de alta presión (anticiclón) se posiciona sobre la región. El mapa sinóptico muestra isobaras amplias y espaciadas alrededor de un centro de 1028 hPa.',
@@ -122,7 +122,7 @@ export const escenarios = [
     titulo: 'Mesoescala: Circulación de Valle',
     resumen: 'Día cálido sin viento sinóptico, 15:00 hs. Las laderas del valle se calientan con el sol.',
     icono: Mountain,
-    acento: 'emerald',
+    acento: 'verde',
     visual: 'valle',
     contexto: [
       'Es un día cálido y soleado, sin viento de escala sinóptica (el gradiente de presión es débil). Son las 15:00 hs y las laderas del valle llevan varias horas recibiendo radiación solar directa.',
@@ -164,7 +164,7 @@ export const escenarios = [
     titulo: 'Tormenta de Verano (Seca)',
     resumen: 'Cumulonimbus con baja humedad en superficie, virga y caída de rayos.',
     icono: CloudLightning,
-    acento: 'amber',
+    acento: 'medio',
     visual: 'tormenta',
     contexto: [
       'Jornada de altas temperaturas. Por la tarde se desarrollan cumulonimbus, pero la humedad en superficie es muy baja: la precipitación se evapora antes de llegar al suelo (virga).',

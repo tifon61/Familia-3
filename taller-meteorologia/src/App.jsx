@@ -76,7 +76,7 @@ export default function App() {
   const escenarioAbierto = escenarios.find((e) => e.id === abierto)
 
   return (
-    <div className="min-h-screen text-slate-100">
+    <div className="flex min-h-screen flex-col">
       <Encabezado logo={estado.logo} onCambiarLogo={(logo) => actualizar({ logo })} />
 
       {estado.pantalla === 'inicio' && (
@@ -121,7 +121,7 @@ export default function App() {
         />
       )}
 
-      <footer className="no-imprimir mx-auto max-w-6xl px-4 pb-8 pt-4 text-center text-xs text-slate-600">
+      <footer className="no-imprimir mt-auto border-t border-borde bg-white px-4 py-4 text-center text-xs font-semibold text-apagado">
         Actividad de capacitación · Taller de Información Meteorológica para brigadistas forestales
       </footer>
     </div>

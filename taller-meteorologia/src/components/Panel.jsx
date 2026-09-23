@@ -1,4 +1,4 @@
-import { CheckCircle2, Circle, CircleDashed, ChevronRight, Send, Info, MapPin, Users, Lock, RotateCcw, Loader2 } from 'lucide-react'
+import { CheckCircle2, Circle, CircleDashed, ChevronRight, Send, Info, MapPin, Lock, RotateCcw, Loader2 } from 'lucide-react'
 import { escenarios, preguntaRespondida } from '../data/escenarios'
 import { acentos } from '../data/estilos'
 
@@ -10,43 +10,41 @@ export default function Panel({ participante, respuestas, completadas, enviando,
   const porcentaje = Math.round((cantidad / escenarios.length) * 100)
 
   return (
-    <main className="animar-entrada mx-auto max-w-6xl px-4 py-8">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Panel de situaciones operativas</p>
-          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-300">
-            <span className="inline-flex items-center gap-1.5"><Users className="h-4 w-4 text-sky-300" />{participante.nombre}</span>
-            <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-orange-300" />{participante.localidad}</span>
+    <main className="animar-entrada mx-auto max-w-6xl px-4 py-6 sm:py-8">
+      {/* Barra del participante (estilo "barra de ciudad") */}
+      <div className="flex flex-col gap-4 rounded-2xl bg-primario px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-wide text-white/70">Panel de situaciones operativas</p>
+          <h2 className="mt-1 truncate font-titulo text-2xl font-black uppercase leading-none sm:text-3xl">{participante.nombre}</h2>
+          <p className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-white/80">
+            <MapPin className="h-3.5 w-3.5" /> {participante.localidad}
+          </p>
+        </div>
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          <div className="rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-center text-[0.7rem] font-extrabold uppercase tracking-wide">
+            Progreso
+            <span className="block text-lg font-black leading-tight">{cantidad} / {escenarios.length}</span>
           </div>
         </div>
-        <button onClick={onReiniciar} className="inline-flex items-center gap-1.5 self-start text-xs text-slate-500 transition hover:text-red-300 sm:self-auto">
-          <RotateCcw className="h-3.5 w-3.5" /> Reiniciar actividad
-        </button>
       </div>
 
-      <div className="mt-6 flex gap-3 rounded-xl border border-sky-500/30 bg-sky-500/10 p-4 text-sky-100">
-        <Info className="mt-0.5 h-5 w-5 shrink-0 text-sky-300" />
-        <p className="text-sm sm:text-base">
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-borde" role="progressbar" aria-valuenow={porcentaje} aria-valuemin={0} aria-valuemax={100} aria-label="Progreso de la actividad">
+        <div className="h-full rounded-full bg-verde transition-all duration-500" style={{ width: `${porcentaje}%` }} />
+      </div>
+
+      <div className="mt-5 flex gap-3 rounded-xl border border-secundario-claro border-l-4 border-l-secundario bg-white px-4 py-3.5">
+        <Info className="mt-0.5 h-5 w-5 shrink-0 text-primario" />
+        <p className="text-sm font-semibold text-texto sm:text-[0.95rem]">
           Seleccioná y analizá los 4 escenarios meteorológicos. Una vez completados todos, podrás enviar tu reporte.
         </p>
       </div>
 
-      {/* Barra de progreso */}
-      <div className="mt-6">
-        <div className="mb-2 flex justify-between text-sm">
-          <span className="text-slate-400">Progreso</span>
-          <span className="font-semibold text-white">{cantidad} / {escenarios.length} completadas</span>
-        </div>
-        <div className="h-2 overflow-hidden rounded-full bg-slate-800" role="progressbar" aria-valuenow={porcentaje} aria-valuemin={0} aria-valuemax={100}>
-          <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-500" style={{ width: `${porcentaje}%` }} />
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {escenarios.map((esc) => (
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        {escenarios.map((esc, i) => (
           <TarjetaSituacion
             key={esc.id}
             escenario={esc}
+            orden={i}
             respuestas={respuestas[esc.id] ?? {}}
             completada={Boolean(completadas[esc.id])}
             onAbrir={() => onAbrir(esc.id)}
@@ -54,24 +52,30 @@ export default function Panel({ participante, respuestas, completadas, enviando,
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col items-center gap-2 rounded-2xl border border-slate-800 bg-slate-900/60 p-6 text-center">
+      <div className="mt-6 flex flex-col items-center gap-2 rounded-2xl border border-borde bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <button
           onClick={onEnviar}
           disabled={!todas || enviando}
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-900/40 transition hover:bg-emerald-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400 disabled:shadow-none"
+          className="inline-flex items-center gap-2 rounded-full bg-verde px-8 py-3.5 text-base font-black text-white shadow-[0_6px_18px_rgba(0,121,107,0.35)] transition hover:-translate-y-0.5 hover:brightness-110 disabled:translate-y-0 disabled:cursor-not-allowed disabled:bg-borde disabled:text-apagado disabled:shadow-none"
         >
-          {enviando ? <Loader2 className="h-4 w-4 animate-spin" /> : todas ? <Send className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+          {enviando ? <Loader2 className="h-5 w-5 animate-spin" /> : todas ? <Send className="h-5 w-5" /> : <Lock className="h-5 w-5" />}
           {enviando ? 'Enviando…' : 'Enviar Reporte'}
         </button>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs font-semibold text-apagado">
           {todas ? 'Todo listo. Revisá tus respuestas si querés y enviá el reporte.' : `Faltan ${escenarios.length - cantidad} situación(es) para habilitar el envío.`}
         </p>
+      </div>
+
+      <div className="mt-4 text-center">
+        <button onClick={onReiniciar} className="inline-flex items-center gap-1.5 text-xs font-semibold text-apagado transition hover:text-peligro">
+          <RotateCcw className="h-3.5 w-3.5" /> Reiniciar actividad
+        </button>
       </div>
     </main>
   )
 }
 
-function TarjetaSituacion({ escenario, respuestas, completada, onAbrir }) {
+function TarjetaSituacion({ escenario, orden, respuestas, completada, onAbrir }) {
   const { icono: Icono, numero, titulo, resumen, preguntas } = escenario
   const estilo = acentos[escenario.acento]
   const respondidas = preguntas.filter((p) => preguntaRespondida(p, respuestas[p.id])).length
@@ -80,24 +84,30 @@ function TarjetaSituacion({ escenario, respuestas, completada, onAbrir }) {
   return (
     <button
       onClick={onAbrir}
-      className={`group flex h-full flex-col rounded-2xl border bg-slate-900/80 p-5 text-left transition hover:-translate-y-0.5 hover:bg-slate-900 hover:shadow-xl hover:shadow-black/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 ${
-        completada ? 'border-emerald-500/40' : `border-slate-700/70 ${estilo.borde}`
+      style={{ animationDelay: `${orden * 0.08}s` }}
+      className={`animar-entrada group flex h-full flex-col overflow-hidden rounded-2xl border-2 bg-white text-left shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition hover:-translate-y-[3px] hover:shadow-[0_10px_26px_rgba(0,0,0,0.16)] focus:outline-none focus-visible:ring-4 focus-visible:ring-secundario/50 ${
+        completada ? 'border-verde' : `border-transparent ${estilo.borde}`
       }`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <span className={`flex h-12 w-12 items-center justify-center rounded-xl ring-1 ${estilo.icono}`}>
-          <Icono className="h-6 w-6" />
-        </span>
-        <Estado completada={completada} enProgreso={enProgreso} />
+      <div className={`flex items-center justify-between gap-3 px-5 py-3.5 text-white ${estilo.cabecera}`}>
+        <div>
+          <p className="font-titulo text-2xl font-black uppercase leading-none tracking-tight">Situación {numero}</p>
+          <p className="mt-1 text-xs font-semibold text-white/75">{preguntas.length} preguntas</p>
+        </div>
+        <Icono className="flotar h-10 w-10 shrink-0 opacity-90" strokeWidth={1.75} />
       </div>
-      <p className={`mt-4 text-xs font-semibold uppercase tracking-wider ${estilo.texto}`}>Situación {numero}</p>
-      <h3 className="mt-1 text-lg font-bold text-white">{titulo}</h3>
-      <p className="mt-2 flex-1 text-sm text-slate-400">{resumen}</p>
-      <div className="mt-4 flex items-center justify-between border-t border-slate-800 pt-3 text-sm">
-        <span className="text-slate-500">{respondidas} de {preguntas.length} respuestas</span>
-        <span className="inline-flex items-center gap-1 font-medium text-slate-300 group-hover:text-white">
-          {completada ? 'Revisar' : 'Analizar'} <ChevronRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-        </span>
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-lg font-extrabold leading-snug text-texto">{titulo}</h3>
+          <Estado completada={completada} enProgreso={enProgreso} />
+        </div>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-apagado">{resumen}</p>
+        <div className="mt-4 flex items-center justify-between border-t border-borde pt-3 text-sm">
+          <span className="font-semibold text-apagado">{respondidas} de {preguntas.length} respuestas</span>
+          <span className="inline-flex items-center gap-1 rounded-md bg-fondo px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-primario transition group-hover:bg-primario group-hover:text-white">
+            {completada ? 'Revisar' : 'Analizar'} <ChevronRight className="h-4 w-4" />
+          </span>
+        </div>
       </div>
     </button>
   )
@@ -106,20 +116,20 @@ function TarjetaSituacion({ escenario, respuestas, completada, onAbrir }) {
 function Estado({ completada, enProgreso }) {
   if (completada) {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-semibold text-emerald-300">
+      <span className="inline-flex shrink-0 items-center gap-1 rounded-xl bg-[#e0f2f1] px-2.5 py-1 text-xs font-extrabold text-verde">
         <CheckCircle2 className="h-3.5 w-3.5" /> Completada
       </span>
     )
   }
   if (enProgreso) {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-sky-500/15 px-2.5 py-1 text-xs font-semibold text-sky-300">
+      <span className="inline-flex shrink-0 items-center gap-1 rounded-xl bg-[#e0f2fe] px-2.5 py-1 text-xs font-extrabold text-[#0369a1]">
         <CircleDashed className="h-3.5 w-3.5" /> En curso
       </span>
     )
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-semibold text-amber-300">
+    <span className="inline-flex shrink-0 items-center gap-1 rounded-xl bg-[#fef9c3] px-2.5 py-1 text-xs font-extrabold text-[#854d0e]">
       <Circle className="h-3.5 w-3.5" /> Pendiente
     </span>
   )
