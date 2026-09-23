@@ -97,8 +97,8 @@ google-apps-script/
   (`onResponder`, `onCompletar`, …).
 - **Autoguardado.** Un `useEffect` guarda el estado en `localStorage` cada vez
   que cambia, así no se pierde nada si se cierra la pestaña.
-- **Completar una situación** exige responder todas las preguntas (textos de
-  al menos 20 caracteres). Recién ahí se muestra la corrección de las
+- **Completar una situación** exige responder todas las preguntas (los textos
+  pueden tener cualquier largo, pero no pueden quedar vacíos). Recién ahí se muestra la corrección de las
   preguntas de opción múltiple, con una explicación, y esas opciones quedan
   bloqueadas.
 - **Paleta en un solo lugar.** Los colores del Grupo de Pronóstico están en

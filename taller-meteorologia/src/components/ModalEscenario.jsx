@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X, CheckCircle2, XCircle, Save, ClipboardList, AlertTriangle, Lightbulb, ArrowLeft, Maximize2, Wind } from 'lucide-react'
 import VisualEscenario from './Visuales'
-import { MINIMO_CARACTERES, escenarioCompleto, preguntaRespondida } from '../data/escenarios'
+import { escenarioCompleto, preguntaRespondida } from '../data/escenarios'
 import { acentos } from '../data/estilos'
 import { rutaImagen } from '../utils/config'
 
@@ -244,7 +244,7 @@ function Pregunta({ id, pregunta, valor, onCambio, mostrarCorreccion, mostrarErr
 
       {mostrarError && (
         <p className="mt-2 text-xs font-bold text-peligro">
-          {pregunta.tipo === 'opcion' ? 'Elegí una opción.' : `Escribí una respuesta de al menos ${MINIMO_CARACTERES} caracteres.`}
+          {pregunta.tipo === 'opcion' ? 'Elegí una opción.' : 'Escribí una respuesta.'}
         </p>
       )}
     </fieldset>
@@ -296,8 +296,6 @@ function OpcionMultiple({ id, pregunta, valor, onCambio, mostrarCorreccion }) {
 }
 
 function TextoLibre({ id, pregunta, valor, onCambio }) {
-  const largo = valor.trim().length
-  const suficiente = largo >= MINIMO_CARACTERES
   return (
     <div className="mt-3">
       <label htmlFor={`${id}-texto`} className="sr-only">{pregunta.enunciado}</label>
@@ -309,9 +307,6 @@ function TextoLibre({ id, pregunta, valor, onCambio }) {
         placeholder={pregunta.placeholder}
         className="w-full resize-y rounded-lg border border-[#cbd5e1] bg-white p-3 text-[0.95rem] leading-relaxed text-texto placeholder:text-apagado/70 focus:border-primario focus:outline-none focus:ring-2 focus:ring-primario/20"
       />
-      <p className={`mt-1 text-right text-xs font-bold ${suficiente ? 'text-verde' : 'text-apagado'}`}>
-        {suficiente ? '✓ ' : ''}{largo} caracteres{suficiente ? '' : ` (mínimo ${MINIMO_CARACTERES})`}
-      </p>
     </div>
   )
 }

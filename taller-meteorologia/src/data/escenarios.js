@@ -6,12 +6,10 @@ import { Wind, Gauge, Mountain, CloudLightning } from 'lucide-react'
 //
 // Tipos de pregunta:
 //   'opcion' -> opción múltiple, con `opciones`, `correcta` y `explicacion`
-//   'texto'  -> respuesta libre (se exige un mínimo de caracteres)
+//   'texto'  -> respuesta libre (cualquier largo, pero no vacía)
 //
 // `imagenes`: archivos dentro de la carpeta imagenes/ del sitio. Si alguno no
 // existe, simplemente no se muestra.
-
-export const MINIMO_CARACTERES = 20
 
 export const escenarios = [
   {
@@ -227,10 +225,10 @@ export const escenarios = [
 ]
 
 // Una situación está completa cuando todas sus preguntas tienen respuesta
-// válida: una opción elegida, o un texto con el mínimo de caracteres.
+// válida: una opción elegida, o un texto que no esté vacío.
 export function preguntaRespondida(pregunta, valor) {
   if (pregunta.tipo === 'opcion') return Boolean(valor)
-  return typeof valor === 'string' && valor.trim().length >= MINIMO_CARACTERES
+  return typeof valor === 'string' && valor.trim().length > 0
 }
 
 export function escenarioCompleto(escenario, respuestas = {}) {
