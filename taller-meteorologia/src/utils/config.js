@@ -5,6 +5,7 @@ const config = typeof window !== 'undefined' ? window.CONFIG_TALLER ?? {} : {}
 const carpeta = config.carpetaImagenes ?? './imagenes/'
 
 export const FORMSPREE_URL = (config.formspree ?? '').trim()
+export const GOOGLE_SHEET_URL = (config.googleSheet ?? '').trim()
 export const INSTITUCION = config.institucion ?? 'Grupo de Pronóstico'
 
 // Nombres fijos de imágenes: si existen en la carpeta, la app las muestra;

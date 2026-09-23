@@ -6,7 +6,7 @@ import ModalEscenario from './components/ModalEscenario'
 import Reporte from './components/Reporte'
 import { escenarios, escenarioCompleto } from './data/escenarios'
 import { borrarEstado, cargarEstado, guardarEstado } from './utils/almacenamiento'
-import { enviarReporte } from './utils/envio'
+import { enviarReporte, nuevoIdEnvio } from './utils/envio'
 
 // Estado inicial de la actividad. Todo lo que la app "recuerda" está acá:
 //   pantalla:     'inicio' | 'panel' | 'reporte'
@@ -20,6 +20,7 @@ const estadoVacio = {
   completadas: {},
   enviadoEn: null,
   estadoEnvio: null, // 'enviado' | 'error' | 'local'
+  idEnvio: null, // se crea una sola vez, así un reintento no duplica la fila
   logo: null,
 }
 
@@ -59,9 +60,10 @@ export default function App() {
   async function enviar() {
     setEnviando(true)
     const enviadoEn = estado.enviadoEn ?? new Date().toISOString()
-    const estadoEnvio = await enviarReporte({ participante: estado.participante, respuestas: estado.respuestas, enviadoEn })
+    const idEnvio = estado.idEnvio ?? nuevoIdEnvio()
+    const estadoEnvio = await enviarReporte({ participante: estado.participante, respuestas: estado.respuestas, enviadoEn, idEnvio })
     setEnviando(false)
-    actualizar({ pantalla: 'reporte', enviadoEn, estadoEnvio })
+    actualizar({ pantalla: 'reporte', enviadoEn, idEnvio, estadoEnvio })
   }
 
   function reiniciar() {

@@ -30,6 +30,9 @@ window.CONFIG_TALLER = {
 }
 ```
 
+- **googleSheet:** URL de la aplicación web de Apps Script. Cada reporte se
+  guarda como una fila en una Google Sheet. El script y la guía paso a paso
+  están en `google-apps-script/` (`Codigo.gs` y `GOOGLE-SHEETS.md`).
 - **formspree:** si se completa, al tocar "Enviar Reporte" las respuestas llegan
   por mail a la cuenta de Formspree. Si falla (sin señal), la app avisa y ofrece
   reintentar o copiar/descargar el reporte. Vacío = no se envía nada.
@@ -66,7 +69,10 @@ src/
     almacenamiento.js      guarda el progreso en el navegador (localStorage)
     reporte.js             arma el reporte en texto plano y calcula el puntaje
     config.js              lee la configuración escrita en el index.html
-    envio.js               manda el reporte a Formspree (fetch + async/await)
+    envio.js               manda el reporte a Google Sheets y/o Formspree (fetch + async/await)
+google-apps-script/
+  Codigo.gs                el "backend": recibe cada reporte y lo escribe en la planilla
+  GOOGLE-SHEETS.md         guía para crear la planilla y publicar el script
 ```
 
 ### Ideas clave para entender el código
