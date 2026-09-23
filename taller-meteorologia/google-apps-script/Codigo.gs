@@ -9,14 +9,44 @@
 //   (por ejemplo, al tocar "Reintentar envío"), se actualiza la misma fila en
 //   lugar de duplicarla.
 
+// Clave para ver los resultados desde la página interna (index.html#resultados).
+// CAMBIALA por una propia antes de publicar: quien la tenga puede leer todas
+// las respuestas. Mientras diga "cambiar-esta-clave", la lectura está bloqueada.
+const CLAVE_RESULTADOS = "cambiar-esta-clave";
+
 const NOMBRE_HOJA = "Respuestas";
 const COLUMNA_ID = "ID envío";
 const COLUMNA_FECHA = "Fecha de envío";
 
-// Abrir la URL del script en el navegador sirve para comprobar que está
-// publicado correctamente.
-function doGet() {
-  return responderJson({ ok: true, mensaje: "El script del taller está funcionando." });
+// - Sin parámetros: abrir la URL en el navegador sirve para comprobar que el
+//   script está publicado correctamente.
+// - ?accion=resultados&clave=...: devuelve todas las filas para la página de
+//   resultados.
+function doGet(e) {
+  const parametros = (e && e.parameter) || {};
+  if (parametros.accion !== "resultados") {
+    return responderJson({ ok: true, mensaje: "El script del taller está funcionando." });
+  }
+  if (CLAVE_RESULTADOS === "cambiar-esta-clave") {
+    return responderJson({ ok: false, error: "Falta configurar CLAVE_RESULTADOS en el script." });
+  }
+  if (parametros.clave !== CLAVE_RESULTADOS) {
+    return responderJson({ ok: false, error: "Clave incorrecta." });
+  }
+  return responderJson({ ok: true, filas: leerFilas() });
+}
+
+// Convierte la hoja en una lista de objetos { columna: valor }.
+function leerFilas() {
+  const hoja = obtenerHoja();
+  if (hoja.getLastRow() < 2) return [];
+  const valores = hoja.getRange(1, 1, hoja.getLastRow(), hoja.getLastColumn()).getValues();
+  const encabezados = valores[0];
+  return valores.slice(1).map((fila) => {
+    const obj = {};
+    encabezados.forEach((columna, i) => { if (columna) obj[columna] = fila[i]; });
+    return obj;
+  });
 }
 
 function doPost(e) {

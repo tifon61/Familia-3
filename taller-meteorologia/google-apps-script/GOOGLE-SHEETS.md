@@ -16,7 +16,12 @@ lleva unos 10 minutos.
 2. Se abre un editor con un archivo `Código.gs`. Borrá todo lo que tiene.
 3. Copiá y pegá el contenido completo de `Codigo.gs` (el archivo que está al
    lado de esta guía).
-4. Guardá con el ícono del disquete (o Ctrl+S).
+4. Cerca del principio, cambiá la clave para ver resultados por una propia:
+   ```js
+   const CLAVE_RESULTADOS = "cambiar-esta-clave";   // ← poné otra, ej. "brigada-bolson-26"
+   ```
+   Mientras diga `cambiar-esta-clave`, la página de resultados no muestra nada.
+5. Guardá con el ícono del disquete (o Ctrl+S).
 
 ## 3. Publicarlo como aplicación web
 
@@ -54,6 +59,24 @@ lleva unos 10 minutos.
 Hacé la actividad completa y enviá el reporte. En la planilla va a aparecer
 una hoja **Respuestas** con los encabezados en azul y tu fila.
 
+## 6. Ver los resultados
+
+Abrí la dirección de la app agregando `#resultados` al final, por ejemplo:
+
+```
+https://usuario.github.io/repositorio/#resultados
+```
+
+Pide la clave (`CLAVE_RESULTADOS`) una vez y la recuerda en ese navegador.
+Muestra el porcentaje de aciertos promedio, aciertos por situación y por
+pregunta, qué opción eligió cada uno, resultados por localidad, la lista de
+participantes (tocando una fila se ven todas sus respuestas) y las respuestas
+de texto libre agrupadas por pregunta. Se puede filtrar por localidad.
+
+No hay ningún botón en la app que lleve ahí: solo entra quien conoce la
+dirección y la clave. Sin la planilla configurada, esa página muestra datos de
+ejemplo para ver cómo queda.
+
 ## Qué se guarda
 
 Una fila por reporte con: ID del envío, fecha, nombre, localidad, cantidad de
@@ -68,9 +91,11 @@ opción múltiple, además, si fue correcta o incorrecta).
 - **¿Puedo cambiar el script después?** Sí, pero para que el cambio se
   aplique: **Implementar → Administrar implementaciones → ✏️ → Versión: Nueva
   versión → Implementar**. La URL sigue siendo la misma.
-- **¿Quién puede ver las respuestas?** Solo quienes tengan acceso a la
-  planilla (se comparte como cualquier Google Sheet). La URL del script solo
-  permite *agregar* filas, no leerlas. Igual, no la publiques fuera de la app:
-  cualquiera que la tenga podría enviar filas.
+- **¿Quién puede ver las respuestas?** Quienes tengan acceso a la planilla, y
+  quienes sepan la `CLAVE_RESULTADOS` (desde la página de resultados). Sin la
+  clave, la URL del script solo permite *agregar* filas. No publiques la URL
+  fuera de la app: cualquiera que la tenga podría enviar filas.
+- **Cambié la clave y no funciona.** Después de editar el script hay que
+  publicar una nueva versión (ver la pregunta anterior).
 - **¿Puedo usar Formspree además?** Sí, si completás los dos campos la app
   envía a ambos.

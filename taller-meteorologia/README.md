@@ -48,6 +48,12 @@ GitHub Pages la sirve directamente en `https://<usuario>.github.io/<repo>/meteo/
 sin necesitar un paso de compilación en el servidor. **Después de cambiar el
 código hay que volver a correr `npm run build` y commitear `meteo/`.**
 
+## Página interna de resultados
+
+`index.html#resultados` muestra estadísticas de todos los reportes guardados
+en Google Sheets (pide la `CLAVE_RESULTADOS` del script). Sin planilla
+configurada muestra datos de ejemplo. No hay botón que lleve ahí.
+
 ## Cómo está organizado
 
 ```
@@ -65,10 +71,15 @@ src/
     ModalEscenario.jsx     detalle de cada situación con su formulario
     Visuales.jsx           mapas y esquemas dibujados en SVG
     Reporte.jsx            pantalla de éxito, copiar / descargar / imprimir
+    Resultados.jsx         página interna de resultados (#resultados)
+    Graficos.jsx           barras y columnas hechas con divs, sin librerías
+    ErrorPantalla.jsx      evita la pantalla en blanco si algo falla
   utils/
     almacenamiento.js      guarda el progreso en el navegador (localStorage)
     reporte.js             arma el reporte en texto plano y calcula el puntaje
     config.js              lee la configuración escrita en el index.html
+    analisis.js            convierte las filas de la planilla en estadísticas
+    resultadosApi.js       lee las filas del script (con clave) y genera datos de ejemplo
     envio.js               manda el reporte a Google Sheets y/o Formspree (fetch + async/await)
 google-apps-script/
   Codigo.gs                el "backend": recibe cada reporte y lo escribe en la planilla

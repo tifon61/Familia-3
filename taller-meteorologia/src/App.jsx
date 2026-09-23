@@ -4,6 +4,7 @@ import Inicio from './components/Inicio'
 import Panel from './components/Panel'
 import ModalEscenario from './components/ModalEscenario'
 import Reporte from './components/Reporte'
+import Resultados from './components/Resultados'
 import { escenarios, escenarioCompleto } from './data/escenarios'
 import { borrarEstado, cargarEstado, guardarEstado } from './utils/almacenamiento'
 import { enviarReporte, nuevoIdEnvio } from './utils/envio'
@@ -24,7 +25,31 @@ const estadoVacio = {
   logo: null,
 }
 
+// La página interna de resultados se abre agregando #resultados a la
+// dirección (no hay ningún botón que lleve ahí).
+const enResultados = () => window.location.hash === '#resultados'
+
 export default function App() {
+  const [verResultados, setVerResultados] = useState(enResultados)
+  useEffect(() => {
+    const alCambiar = () => setVerResultados(enResultados())
+    window.addEventListener('hashchange', alCambiar)
+    return () => window.removeEventListener('hashchange', alCambiar)
+  }, [])
+
+  if (verResultados) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Encabezado logo={null} onCambiarLogo={() => {}} />
+        <Resultados />
+      </div>
+    )
+  }
+  return <Actividad />
+}
+
+// La actividad de los brigadistas (todo lo que estaba antes en App).
+function Actividad() {
   // La función dentro de useState solo corre la primera vez: recupera el
   // progreso guardado (si existe) en lugar de arrancar de cero.
   const [estado, setEstado] = useState(() => ({ ...estadoVacio, ...cargarEstado() }))
