@@ -35,7 +35,12 @@ export default function App() {
   useEffect(() => guardarEstado(estado), [estado])
 
   // Al cambiar de pantalla, volvemos arriba de todo.
-  useEffect(() => window.scrollTo({ top: 0 }), [estado.pantalla])
+  // (También movemos el propio documento: dentro de un visor/iframe
+  // window.scrollTo a veces no alcanza y se quedaba mirando un espacio vacío.)
+  useEffect(() => {
+    window.scrollTo({ top: 0 })
+    document.scrollingElement?.scrollTo?.({ top: 0 })
+  }, [estado.pantalla])
 
   const actualizar = (cambios) => setEstado((prev) => ({ ...prev, ...cambios }))
 
