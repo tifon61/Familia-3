@@ -7,6 +7,9 @@ import { Wind, Gauge, Mountain, CloudLightning } from 'lucide-react'
 // Tipos de pregunta:
 //   'opcion' -> opción múltiple, con `opciones`, `correcta` y `explicacion`
 //   'texto'  -> respuesta libre (se exige un mínimo de caracteres)
+//
+// `imagenes`: archivos dentro de la carpeta imagenes/ del sitio. Si alguno no
+// existe, simplemente no se muestra.
 
 export const MINIMO_CARACTERES = 20
 
@@ -15,19 +18,30 @@ export const escenarios = [
     id: 'frente-frio',
     numero: 1,
     titulo: 'Frente Frío con Alerta Temprana',
-    resumen: 'Ingreso de un frente frío con viento norte previo y alerta amarilla por vientos post-frontales.',
+    resumen: 'Ingreso de un frente frío con viento norte previo y alerta amarilla por vientos para el día posterior.',
     icono: Wind,
     acento: 'oscuro',
     visual: 'frente',
     contexto: [
-      'Durante la mañana se registra viento del sector norte, cálido y seco, con temperaturas elevadas y humedad relativa en descenso. El pronóstico indica el ingreso de un frente frío desde el sudoeste durante la tarde.',
-      'El Servicio Meteorológico emitió una alerta amarilla por vientos intensos post-frontales, con ráfagas que podrían superar los 60 km/h una vez producido el pasaje del frente.',
+      'En la región, se espera el ingreso de un frente frío durante las próximas horas. Previo al pasaje del frente observamos viento norte y temperaturas elevadas. Para el día posterior al pasaje del frente se emite un alerta amarilla por vientos.',
     ],
     datos: [
-      { etiqueta: 'Viento actual', valor: 'N 25 km/h' },
-      { etiqueta: 'Temperatura', valor: '31 °C' },
-      { etiqueta: 'Humedad relativa', valor: '18 %' },
+      { etiqueta: 'Viento previo', valor: 'Sector norte' },
+      { etiqueta: 'Temperatura', valor: 'Elevada' },
+      { etiqueta: 'Sistema', valor: 'Frente frío' },
       { etiqueta: 'Alerta', valor: 'Amarilla · viento', destacado: true },
+    ],
+    alerta: {
+      titulo: 'Alerta amarilla por viento',
+      items: [
+        '30-50 km/h con ráfagas ≥ 70 km/h (región cuyana)',
+        '70-90 km/h con ráfagas ≥ 120 km/h (cordillera)',
+        '40-60 km/h con ráfagas ≥ 90 km/h (región patagónica)',
+      ],
+    },
+    imagenes: [
+      { archivo: 'situacion-1-alerta-viento.jpg', titulo: 'Alerta por viento', fuente: 'Servicio Meteorológico Nacional' },
+      { archivo: 'situacion-1-satelite.jpg', titulo: 'Imagen satelital GOES-19, canal 13 (infrarrojo)', fuente: 'SMN Argentina' },
     ],
     preguntas: [
       {
@@ -36,19 +50,18 @@ export const escenarios = [
         tipo: 'opcion',
         enunciado: '¿Qué cambio a gran escala dominará inmediatamente tras el paso del frente?',
         opciones: [
-          { id: 'a', texto: 'El viento norte se intensifica y la temperatura sigue en ascenso.' },
-          { id: 'b', texto: 'Rotación brusca del viento al sector sur/sudoeste con ráfagas y descenso de temperatura.' },
-          { id: 'c', texto: 'Calma total de viento y aumento de la humedad por varios días.' },
-          { id: 'd', texto: 'Rotación del viento al sector este con lluvias persistentes y ascenso térmico.' },
+          { id: 'a', texto: 'Rotación brusca del viento al sector sur/sudoeste con ráfagas y descenso de temperatura.' },
+          { id: 'b', texto: 'Aumento de la temperatura y disminución paulatina del viento.' },
+          { id: 'c', texto: 'El viento rotará al este aportando humedad a la región.' },
         ],
-        correcta: 'b',
+        correcta: 'a',
         explicacion: 'Al pasar el frente frío, el aire frío desplaza al cálido: el viento rota bruscamente al S/SO, llegan las ráfagas post-frontales y la temperatura desciende. Para el fuego, esto significa que el flanco que venía "tranquilo" puede transformarse de golpe en cabeza.',
       },
       {
         id: 'p2',
         etiqueta: 'Pregunta 2',
         tipo: 'texto',
-        enunciado: '¿Qué medidas/precauciones tendrá en función de la alerta amarilla vigente?',
+        enunciado: '¿Qué medidas/precauciones tendrá en cuenta en función de la alerta amarilla vigente?',
         placeholder: 'Ej.: comunicaciones, horarios, puntos de encuentro, monitoreo del viento…',
       },
       {
@@ -64,19 +77,20 @@ export const escenarios = [
     id: 'alta-post-frontal',
     numero: 2,
     titulo: 'Alta Presión Post Frontal',
-    resumen: 'Sistema de alta presión posicionado detrás del frente. Analizá el mapa sinóptico de presión.',
+    resumen: 'Luego del pasaje de un frente frío se posiciona un sistema de alta presión en la región.',
     icono: Gauge,
     acento: 'celeste',
     visual: 'alta',
     contexto: [
-      'Tras el pasaje del frente, un sistema de alta presión (anticiclón) se posiciona sobre la región. El mapa sinóptico muestra isobaras amplias y espaciadas alrededor de un centro de 1028 hPa.',
-      'Se esperan cielos mayormente despejados, vientos débiles, amplitud térmica marcada y mañanas frescas con posibles inversiones térmicas en los valles.',
+      'Luego del pasaje de un frente frío se posiciona un sistema de alta presión en la región.',
     ],
     datos: [
-      { etiqueta: 'Presión central', valor: '1028 hPa' },
-      { etiqueta: 'Viento', valor: 'Débil, variable' },
-      { etiqueta: 'Cielo', valor: 'Despejado' },
-      { etiqueta: 'Amplitud térmica', valor: '2 °C → 22 °C', destacado: true },
+      { etiqueta: 'Sistema', valor: 'Alta presión' },
+      { etiqueta: 'Momento', valor: 'Post frontal' },
+    ],
+    imagenes: [
+      { archivo: 'situacion-2-mapa-presion.jpg', titulo: 'Presión en superficie (isobaras)', fuente: 'Windy.com' },
+      { archivo: 'situacion-2-niebla-valle.jpg', titulo: 'Niebla en un valle cordillerano' },
     ],
     preguntas: [
       {
@@ -85,12 +99,10 @@ export const escenarios = [
         tipo: 'opcion',
         enunciado: '¿Qué situación respecto a la estabilidad/inestabilidad proporciona el sistema de alta presión?',
         opciones: [
-          { id: 'a', texto: 'Favorece el ascenso de aire y la inestabilidad, con desarrollo de tormentas.' },
-          { id: 'b', texto: 'No influye en la estabilidad; solo modifica la temperatura.' },
-          { id: 'c', texto: 'Favorece descenso de aire y estabilidad atmosférica.' },
-          { id: 'd', texto: 'Genera inestabilidad solo durante la noche.' },
+          { id: 'a', texto: 'Favorece descenso de aire y estabilidad atmosférica.' },
+          { id: 'b', texto: 'Favorece ascenso de aire e inestabilidad atmosférica.' },
         ],
-        correcta: 'c',
+        correcta: 'a',
         explicacion: 'En un anticiclón el aire desciende (subsidencia), se comprime y se calienta, lo que inhibe los movimientos verticales: la atmósfera queda estable. Por eso predominan los cielos despejados y las columnas de humo tienden a quedar "planchadas".',
       },
       {
@@ -99,10 +111,8 @@ export const escenarios = [
         tipo: 'opcion',
         enunciado: '¿Es necesario que haya reducción de la visibilidad (por ejemplo, nieblas) para que nos encontremos en una situación de estabilidad atmosférica?',
         opciones: [
-          { id: 'a', texto: 'Sí, sin niebla ni neblina no puede haber estabilidad.' },
-          { id: 'b', texto: 'No, si bien la formación de niebla requiere estabilidad, podemos tener cielo despejado e igual encontrarnos en una situación estable.' },
-          { id: 'c', texto: 'Sí, la estabilidad solo existe cuando hay nubosidad baja.' },
-          { id: 'd', texto: 'No, porque la niebla solo se forma en situaciones inestables.' },
+          { id: 'a', texto: 'Sí, si no hay niebla es una situación inestable.' },
+          { id: 'b', texto: 'No, si bien la formación de la niebla requiere de estabilidad atmosférica, podemos tener cielos despejados e igual encontrarnos en una situación estable.' },
         ],
         correcta: 'b',
         explicacion: 'La niebla es una consecuencia posible de la estabilidad, no una condición necesaria. Un día soleado y despejado bajo un anticiclón es, justamente, un ejemplo típico de atmósfera estable.',
@@ -120,19 +130,22 @@ export const escenarios = [
     id: 'mesoescala-valle',
     numero: 3,
     titulo: 'Mesoescala: Circulación de Valle',
-    resumen: 'Día cálido sin viento sinóptico, 15:00 hs. Las laderas del valle se calientan con el sol.',
+    resumen: 'Día cálido sin viento sinóptico, 15:00 hs. El sol calienta el fondo del valle y sus laderas.',
     icono: Mountain,
     acento: 'verde',
     visual: 'valle',
     contexto: [
-      'Es un día cálido y soleado, sin viento de escala sinóptica (el gradiente de presión es débil). Son las 15:00 hs y las laderas del valle llevan varias horas recibiendo radiación solar directa.',
-      'En estas condiciones, las circulaciones locales generadas por el propio relieve pasan a dominar el comportamiento del viento en superficie.',
+      'Día cálido sin viento sinóptico dominante. Son las 15:00 hs, el sol calienta intensamente el fondo de un valle y sus laderas adyacentes.',
     ],
     datos: [
       { etiqueta: 'Hora', valor: '15:00 hs' },
-      { etiqueta: 'Viento sinóptico', valor: 'Nulo' },
-      { etiqueta: 'Temperatura', valor: '29 °C' },
+      { etiqueta: 'Viento sinóptico', valor: 'Sin viento dominante' },
+      { etiqueta: 'Día', valor: 'Cálido' },
       { etiqueta: 'Laderas', valor: 'En calentamiento', destacado: true },
+    ],
+    // Todavía sin imagen: si suben este archivo, aparece solo.
+    imagenes: [
+      { archivo: 'situacion-3-valle.jpg', titulo: 'Circulación de valle y ladera' },
     ],
     preguntas: [
       {
@@ -141,12 +154,11 @@ export const escenarios = [
         tipo: 'opcion',
         enunciado: 'Según el ciclo diario, ¿qué circulación local dominará a esta hora?',
         opciones: [
-          { id: 'a', texto: 'Viento de montaña y ladera - catabático: el aire frío desciende por las laderas hacia el fondo del valle.' },
-          { id: 'b', texto: 'Viento de valle y ladera - anabático: el aire cálido asciende paralelo a las laderas hacia las cumbres.' },
-          { id: 'c', texto: 'Brisa de mar que ingresa desde la costa hacia el interior.' },
-          { id: 'd', texto: 'Calma absoluta: sin viento sinóptico no hay circulación local.' },
+          { id: 'a', texto: 'Viento de valle y ladera (anabático): el aire cálido asciende paralelo a las laderas hacia las cumbres.' },
+          { id: 'b', texto: 'Viento catabático: el aire frío desciende bruscamente de las cumbres hacia el valle.' },
+          { id: 'c', texto: 'La radiación solar anula los vientos, dejando la zona en calma.' },
         ],
-        correcta: 'b',
+        correcta: 'a',
         explicacion: 'De día, las laderas soleadas calientan el aire en contacto con ellas; ese aire, más liviano, asciende paralelo a la pendiente (viento anabático). De noche el proceso se invierte y el aire frío baja (catabático).',
       },
       {
@@ -162,19 +174,25 @@ export const escenarios = [
     id: 'tormenta-seca',
     numero: 4,
     titulo: 'Tormenta de Verano (Seca)',
-    resumen: 'Cumulonimbus con baja humedad en superficie, virga y caída de rayos.',
+    resumen: 'Cumulonimbus con humedad muy baja en superficie: la precipitación no llega al suelo (virga).',
     icono: CloudLightning,
     acento: 'medio',
     visual: 'tormenta',
     contexto: [
-      'Jornada de altas temperaturas. Por la tarde se desarrollan cumulonimbus, pero la humedad en superficie es muy baja: la precipitación se evapora antes de llegar al suelo (virga).',
-      'Se registra caída de rayos sobre la zona de trabajo. Existe riesgo de combustión interna en árboles alcanzados por descargas, que pueden permanecer latentes y manifestarse horas o días después.',
+      'Se espera un día con altas temperaturas. Mucha inestabilidad desarrolla nubes cumulonimbus. Sin embargo, la humedad relativa en superficie es muy baja y la precipitación no llega al suelo (virga).',
+      'Los rayos que caen sobre árboles pueden generar combustión interna: el fuego queda latente dentro del tronco y puede manifestarse horas después.',
     ],
     datos: [
-      { etiqueta: 'Temperatura', valor: '36 °C' },
-      { etiqueta: 'Humedad relativa', valor: '15 %' },
-      { etiqueta: 'Precipitación', valor: 'Virga (no llega)' },
-      { etiqueta: 'Actividad eléctrica', valor: 'Activa', destacado: true },
+      { etiqueta: 'Temperatura', valor: 'Alta' },
+      { etiqueta: 'Nubes', valor: 'Cumulonimbus' },
+      { etiqueta: 'Humedad en superficie', valor: 'Muy baja' },
+      { etiqueta: 'Precipitación', valor: 'Virga (no llega)', destacado: true },
+    ],
+    imagenes: [
+      { archivo: 'situacion-4-ciclo-tormenta.jpg', titulo: 'Etapas de una nube de tormenta' },
+      { archivo: 'situacion-4-combustion-interna.jpg', titulo: 'El impacto del rayo y la combustión interna' },
+      { archivo: 'situacion-4-arbol-1.jpg', titulo: 'Combustión interna en un tronco' },
+      { archivo: 'situacion-4-arbol-2.jpg', titulo: 'Árbol ardiendo por dentro tras un rayo' },
     ],
     preguntas: [
       {
@@ -183,12 +201,11 @@ export const escenarios = [
         tipo: 'opcion',
         enunciado: '¿Qué consecuencias puede presentar esta situación?',
         opciones: [
-          { id: 'a', texto: 'Lluvias abundantes que eliminan el riesgo de incendio.' },
-          { id: 'b', texto: 'Ninguna, porque si la lluvia no llega al suelo la tormenta no tiene efectos.' },
-          { id: 'c', texto: 'Posible caída de rayos sobre combustible seco y riesgo para la vida, presencia de ráfagas.' },
-          { id: 'd', texto: 'Solo un descenso leve de la temperatura, sin riesgos operativos.' },
+          { id: 'a', texto: 'Generación inmediata de un frente cálido que arrastre el fuego hacia el sur.' },
+          { id: 'b', texto: 'Posible caída de rayos sobre combustible seco y riesgo para la vida, presencia de ráfagas.' },
+          { id: 'c', texto: 'Aumento sostenido de la humedad ambiente que limite el avance del fuego.' },
         ],
-        correcta: 'c',
+        correcta: 'b',
         explicacion: 'Una tormenta seca combina lo peor: rayos que encuentran combustible seco (nuevas igniciones y riesgo directo para las personas) y corrientes descendentes que, al evaporar la virga, se enfrían, aceleran y llegan al suelo como ráfagas erráticas.',
       },
       {

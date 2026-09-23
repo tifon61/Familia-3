@@ -2,7 +2,9 @@
 // la pestaña o se corta la conexión en el campo, no se pierdan las respuestas.
 // Todo va envuelto en try/catch porque en modo incógnito o con el
 // almacenamiento bloqueado, localStorage puede lanzar errores.
-const CLAVE = 'taller-meteo-actividad-final-v1'
+// Se cambia el número de versión cuando cambian las preguntas u opciones,
+// para no mezclar respuestas guardadas con preguntas nuevas.
+const CLAVE = 'taller-meteo-actividad-final-v2'
 
 export function cargarEstado() {
   try {

@@ -1,16 +1,34 @@
 IMÁGENES DE LA ACTIVIDAD
 ========================
 
-Poné en esta carpeta las imágenes con EXACTAMENTE estos nombres
-(minúsculas, sin espacios ni tildes). Si una no está, la app simplemente
-no la muestra.
+Esta carpeta tiene que llamarse "imagenes" y estar al lado del index.html.
+Los nombres tienen que ser EXACTAMENTE estos (minúsculas, sin espacios ni
+tildes). Si una imagen no está, la app simplemente no la muestra.
 
-  logo.png           Logo del Grupo de Pronóstico (redondo, arriba a la izquierda)
-  logo-institucion.png  Logo de la facultad/institución (al lado del anterior)
-  fondo.jpg          Foto de fondo de la pantalla de inicio (se ve con un velo azul)
-  situacion-1.jpg    Imagen de la Situación 1 (Frente frío)
-  situacion-2.jpg    Imagen de la Situación 2 (Alta post frontal / mapa sinóptico)
-  situacion-3.jpg    Imagen de la Situación 3 (Valle)
-  situacion-4.jpg    Imagen de la Situación 4 (Tormenta seca)
+Generales (opcionales):
+  logo.png                 Logo del Grupo de Pronóstico (redondo, arriba a la izquierda)
+  logo-institucion.png     Logo de la facultad/institución (al lado del anterior)
+  fondo.jpg                Foto de fondo de la pantalla de inicio
+
+Situación 1 - Frente frío:
+  situacion-1-alerta-viento.jpg
+  situacion-1-satelite.jpg
+
+Situación 2 - Alta post frontal:
+  situacion-2-mapa-presion.jpg
+  situacion-2-niebla-valle.jpg
+
+Situación 3 - Mesoescala (todavía sin imagen):
+  situacion-3-valle.jpg
+
+Situación 4 - Tormenta seca:
+  situacion-4-ciclo-tormenta.jpg
+  situacion-4-combustion-interna.jpg
+  situacion-4-arbol-1.jpg
+  situacion-4-arbol-2.jpg
+
+Para agregar, sacar o renombrar imágenes de una situación hay que editar la
+lista "imagenes" de esa situación en src/data/escenarios.js y volver a
+compilar. Para REEMPLAZAR una imagen alcanza con subir otra con el mismo nombre.
 
 Consejo: que pesen menos de 500 KB cada una (en el campo hay poca señal).

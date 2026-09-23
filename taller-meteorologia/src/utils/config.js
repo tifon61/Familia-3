@@ -13,5 +13,8 @@ export const imagenes = {
   logo: `${carpeta}logo.png`,
   logoInstitucion: `${carpeta}logo-institucion.png`,
   fondo: `${carpeta}fondo.jpg`,
-  situacion: (numero) => `${carpeta}situacion-${numero}.jpg`,
 }
+
+// Ruta completa de una imagen de la carpeta (las de cada situación se
+// listan en src/data/escenarios.js).
+export const rutaImagen = (archivo) => `${carpeta}${archivo}`

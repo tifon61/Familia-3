@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { X, CheckCircle2, XCircle, Save, ClipboardList, AlertTriangle, Lightbulb, ArrowLeft } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { X, CheckCircle2, XCircle, Save, ClipboardList, AlertTriangle, Lightbulb, ArrowLeft, Maximize2, Wind } from 'lucide-react'
 import VisualEscenario from './Visuales'
 import { MINIMO_CARACTERES, escenarioCompleto, preguntaRespondida } from '../data/escenarios'
 import { acentos } from '../data/estilos'
-import { imagenes } from '../utils/config'
+import { rutaImagen } from '../utils/config'
 
 // Vista de detalle de una situación. Las respuestas se guardan en el estado
 // global a medida que se escriben (autoguardado); el botón final valida que
@@ -89,7 +90,8 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
                 ))}
               </dl>
             </div>
-            <ImagenOpcional key={escenario.id} src={imagenes.situacion(escenario.numero)} alt={`Imagen de referencia: ${escenario.titulo}`} />
+            {escenario.alerta && <RecuadroAlerta alerta={escenario.alerta} />}
+            <Galeria key={escenario.id} imagenes={escenario.imagenes ?? []} />
             <VisualEscenario tipo={escenario.visual} />
           </section>
 
@@ -127,15 +129,91 @@ export default function ModalEscenario({ escenario, respuestas, completada, onRe
   )
 }
 
-// Muestra una imagen real (satélite, carta sinóptica, foto) solo si el archivo
-// existe. Si no existe, onError la oculta y no queda un ícono de imagen rota.
-function ImagenOpcional({ src, alt }) {
-  const [existe, setExiste] = useState(true)
-  if (!existe) return null
+// Recuadro amarillo con el detalle de la alerta vigente.
+function RecuadroAlerta({ alerta }) {
   return (
-    <a href={src} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-2xl border border-borde bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]" title="Abrir imagen en tamaño completo">
-      <img src={src} alt={alt} loading="lazy" onError={() => setExiste(false)} className="block h-auto w-full" />
-    </a>
+    <div className="rounded-2xl border border-[#fde68a] border-l-4 border-l-[#f59e0b] bg-[#fffbeb] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <h3 className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wide text-[#b45309]">
+        <AlertTriangle className="h-4 w-4" /> {alerta.titulo}
+      </h3>
+      <ul className="mt-2.5 space-y-1.5">
+        {alerta.items.map((item) => (
+          <li key={item} className="flex items-start gap-2 text-sm font-semibold text-texto">
+            <Wind className="mt-0.5 h-4 w-4 shrink-0 text-[#f59e0b]" /> {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+// Galería de imágenes reales (satélite, cartas, fotos). Cada imagen que no
+// exista en la carpeta se oculta sola (onError), así nunca queda una imagen
+// rota. Al tocar una, se abre ampliada.
+function Galeria({ imagenes }) {
+  const [faltantes, setFaltantes] = useState([]) // archivos que no cargaron
+  const [ampliada, setAmpliada] = useState(null)
+  const visibles = imagenes.filter((img) => !faltantes.includes(img.archivo))
+  if (visibles.length === 0) return null
+
+  return (
+    <>
+      <div className={`grid gap-3 ${visibles.length > 1 ? 'grid-cols-2' : ''}`}>
+        {visibles.map((img) => (
+          <figure key={img.archivo} className="overflow-hidden rounded-2xl border border-borde bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            <button type="button" onClick={() => setAmpliada(img)} className="group relative block w-full bg-fondo" title="Ver imagen ampliada">
+              <img
+                src={rutaImagen(img.archivo)}
+                alt={img.titulo}
+                loading="lazy"
+                onError={() => setFaltantes((f) => [...f, img.archivo])}
+                className="block aspect-[4/3] w-full object-cover transition group-hover:opacity-90"
+              />
+              <span className="absolute right-2 top-2 rounded-full bg-primario/80 p-1.5 text-white opacity-0 transition group-hover:opacity-100">
+                <Maximize2 className="h-3.5 w-3.5" />
+              </span>
+            </button>
+            <figcaption className="px-3 py-2 text-xs font-bold leading-snug text-primario">
+              {img.titulo}
+              {img.fuente && <span className="block font-semibold text-apagado">Fuente: {img.fuente}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+      {ampliada && <Ampliada imagen={ampliada} onCerrar={() => setAmpliada(null)} />}
+    </>
+  )
+}
+
+// Imagen a pantalla completa. Se dibuja con createPortal directamente en
+// <body>: el modal tiene una animación con transform, y eso haría que un
+// elemento "fixed" adentro quede encerrado en la caja del modal.
+// Escape la cierra sin cerrar la situación:
+// escuchamos en fase de "captura" y frenamos el evento antes de que llegue
+// al manejador del modal.
+function Ampliada({ imagen, onCerrar }) {
+  useEffect(() => {
+    const alPresionar = (e) => {
+      if (e.key !== 'Escape') return
+      e.stopPropagation()
+      onCerrar()
+    }
+    window.addEventListener('keydown', alPresionar, true)
+    return () => window.removeEventListener('keydown', alPresionar, true)
+  }, [onCerrar])
+
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-primario-oscuro/90 p-4" onClick={onCerrar} role="dialog" aria-label={imagen.titulo}>
+      <button onClick={onCerrar} className="absolute right-3 top-3 rounded-lg p-2 text-white/80 hover:bg-white/15 hover:text-white" aria-label="Cerrar imagen">
+        <X className="h-7 w-7" />
+      </button>
+      <img src={rutaImagen(imagen.archivo)} alt={imagen.titulo} className="max-h-[80vh] max-w-full rounded-xl object-contain shadow-2xl" />
+      <p className="text-center text-sm font-bold text-white">
+        {imagen.titulo}
+        {imagen.fuente && <span className="block text-xs font-semibold text-white/70">Fuente: {imagen.fuente}</span>}
+      </p>
+    </div>,
+    document.body,
   )
 }
 

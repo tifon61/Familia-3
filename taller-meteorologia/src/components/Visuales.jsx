@@ -94,7 +94,7 @@ function MapaFrente() {
       <line x1="175" y1="120" x2="215" y2="85" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="3 3" markerEnd="url(#fr-avance)" />
 
       <text x="390" y="22" fill="#fdba74" fontSize="12" fontWeight="600" textAnchor="end">Aire cálido y seco</text>
-      <text x="390" y="36" fill="#fdba74" fontSize="10" textAnchor="end">31 °C · HR 18 %</text>
+      <text x="390" y="36" fill="#fdba74" fontSize="10" textAnchor="end">Temperaturas elevadas</text>
       <text x="20" y="250" fill="#bae6fd" fontSize="12" fontWeight="600">Aire frío · ráfagas</text>
       <text x="330" y="235" fill="#f87171" fontSize="22" fontWeight="700">B</text>
       <text x="358" y="252" fill="#94a3b8" fontSize="9">N ↑</text>
@@ -195,7 +195,7 @@ function EsquemaValle() {
         <path d="M2,0 C-2,-6 1,-11 3,-15 C5,-9 8,-7 6,0 Z" fill="#fde047" />
       </g>
       <text x="14" y="22" fill="#cbd5e1" fontSize="11" fontWeight="600">Laderas soleadas → aire cálido asciende</text>
-      <text x="14" y="36" fill="#94a3b8" fontSize="9">Sin viento sinóptico · 15:00 hs</text>
+      <text x="14" y="36" fill="#94a3b8" fontSize="9">Sin viento sinóptico dominante · 15:00 hs</text>
       <text x="200" y="250" fill="#94a3b8" fontSize="9" textAnchor="middle">fondo del valle</text>
     </Lienzo>
   )
@@ -254,7 +254,7 @@ function EsquemaTormenta() {
         <circle cx="288" cy="206" r="8" fill="#854d0e" />
         <path d="M288,196 C282,186 294,180 288,168" stroke="#a8a29e" strokeWidth="2" fill="none" opacity="0.7" />
       </g>
-      <text x="14" y="252" fill="#fde68a" fontSize="10">36 °C · HR 15 %</text>
+      <text x="14" y="252" fill="#fde68a" fontSize="10">Calor extremo · HR muy baja</text>
       <text x="300" y="252" fill="#fca5a5" fontSize="9">combustión latente</text>
     </Lienzo>
   )
