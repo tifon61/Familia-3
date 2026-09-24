@@ -16,7 +16,6 @@ Situación 1 - Frente frío:
 
 Situación 2 - Alta post frontal:
   situacion-2-mapa-presion.jpg
-  situacion-2-niebla-valle.jpg
 
 Situación 3 - Mesoescala (todavía sin imagen):
   situacion-3-valle.jpg

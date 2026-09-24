@@ -19,13 +19,14 @@ export const escenarios = [
     resumen: 'Ingreso de un frente frío con viento norte previo y alerta amarilla por vientos para el día posterior.',
     icono: Wind,
     acento: 'oscuro',
-    visual: 'frente',
+    // Sin esquema animado (se usan solo las imágenes reales)
+    visual: null,
     contexto: [
       'En la región, se espera el ingreso de un frente frío durante las próximas horas. Previo al pasaje del frente observamos viento norte y temperaturas elevadas. Para el día posterior al pasaje del frente se emite un alerta amarilla por vientos.',
     ],
     datos: [
       { etiqueta: 'Viento previo', valor: 'Sector norte' },
-      { etiqueta: 'Temperatura', valor: 'Elevada' },
+      { etiqueta: 'Temperatura previa', valor: 'Elevada' },
       { etiqueta: 'Sistema', valor: 'Frente frío' },
       { etiqueta: 'Alerta', valor: 'Amarilla · viento', destacado: true },
     ],
@@ -46,7 +47,7 @@ export const escenarios = [
         id: 'p1',
         etiqueta: 'Pregunta 1',
         tipo: 'opcion',
-        enunciado: '¿Qué cambio a gran escala dominará inmediatamente tras el paso del frente?',
+        enunciado: '¿Qué cambio a gran escala dominará tras el paso del frente?',
         opciones: [
           { id: 'a', texto: 'Rotación brusca del viento al sector sur/sudoeste con ráfagas y descenso de temperatura.' },
           { id: 'b', texto: 'Aumento de la temperatura y disminución paulatina del viento.' },
@@ -88,7 +89,6 @@ export const escenarios = [
     ],
     imagenes: [
       { archivo: 'situacion-2-mapa-presion.jpg', titulo: 'Presión en superficie (isobaras)', fuente: 'Windy.com' },
-      { archivo: 'situacion-2-niebla-valle.jpg', titulo: 'Niebla en un valle cordillerano' },
     ],
     preguntas: [
       {
@@ -136,10 +136,8 @@ export const escenarios = [
       'Día cálido sin viento sinóptico dominante. Son las 15:00 hs, el sol calienta intensamente el fondo de un valle y sus laderas adyacentes.',
     ],
     datos: [
-      { etiqueta: 'Hora', valor: '15:00 hs' },
-      { etiqueta: 'Viento sinóptico', valor: 'Sin viento dominante' },
       { etiqueta: 'Día', valor: 'Cálido' },
-      { etiqueta: 'Laderas', valor: 'En calentamiento', destacado: true },
+      { etiqueta: 'Viento sinóptico', valor: 'Sin viento dominante' },
     ],
     // Todavía sin imagen: si suben este archivo, aparece solo.
     imagenes: [
@@ -163,7 +161,7 @@ export const escenarios = [
         id: 'decision',
         etiqueta: 'Decisión operativa',
         tipo: 'texto',
-        enunciado: 'El fuego tiende a trepar empujado por esta brisa ascendente de media tarde. ¿Hacia dónde desplegarían el personal y qué zonas de la ladera evitarían?',
+        enunciado: '¿Hacia dónde desplegarían el personal y qué zonas de la ladera evitarían, teniendo en cuenta el movimiento del aire forzado por el calentamiento?',
         placeholder: 'Indicá zonas seguras, zonas a evitar (chimeneas, parte alta, etc.) y por qué…',
       },
     ],
@@ -175,7 +173,8 @@ export const escenarios = [
     resumen: 'Cumulonimbus con humedad muy baja en superficie: la precipitación no llega al suelo (virga).',
     icono: CloudLightning,
     acento: 'medio',
-    visual: 'tormenta',
+    // Sin esquema animado (se usan solo las imágenes reales)
+    visual: null,
     contexto: [
       'Se espera un día con altas temperaturas. Mucha inestabilidad desarrolla nubes cumulonimbus. Sin embargo, la humedad relativa en superficie es muy baja y la precipitación no llega al suelo (virga).',
       'Los rayos que caen sobre árboles pueden generar combustión interna: el fuego queda latente dentro del tronco y puede manifestarse horas después.',
@@ -184,10 +183,10 @@ export const escenarios = [
       { etiqueta: 'Temperatura', valor: 'Alta' },
       { etiqueta: 'Nubes', valor: 'Cumulonimbus' },
       { etiqueta: 'Humedad en superficie', valor: 'Muy baja' },
-      { etiqueta: 'Precipitación', valor: 'Virga (no llega)', destacado: true },
+      { etiqueta: 'Precipitación', valor: 'No alcanza el suelo', destacado: true },
     ],
     imagenes: [
-      { archivo: 'situacion-4-ciclo-tormenta.jpg', titulo: 'Etapas de una nube de tormenta' },
+      { archivo: 'situacion-4-ciclo-tormenta.jpg', titulo: 'Etapas de una tormenta unicelular' },
       { archivo: 'situacion-4-combustion-interna.jpg', titulo: 'El impacto del rayo y la combustión interna' },
       { archivo: 'situacion-4-arbol-1.jpg', titulo: 'Combustión interna en un tronco' },
       { archivo: 'situacion-4-arbol-2.jpg', titulo: 'Árbol ardiendo por dentro tras un rayo' },
@@ -200,7 +199,7 @@ export const escenarios = [
         enunciado: '¿Qué consecuencias puede presentar esta situación?',
         opciones: [
           { id: 'a', texto: 'Generación inmediata de un frente cálido que arrastre el fuego hacia el sur.' },
-          { id: 'b', texto: 'Posible caída de rayos sobre combustible seco y riesgo para la vida, presencia de ráfagas.' },
+          { id: 'b', texto: 'Posible caída de rayos sobre combustible seco.' },
           { id: 'c', texto: 'Aumento sostenido de la humedad ambiente que limite el avance del fuego.' },
         ],
         correcta: 'b',

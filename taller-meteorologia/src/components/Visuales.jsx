@@ -145,8 +145,7 @@ function MapaAlta() {
         <line key={dx} x1={cx + dx} y1={cy - 50} x2={cx + dx} y2={cy - 26} stroke="#fbbf24" strokeWidth="2" markerEnd="url(#al-baja)" className="flujo" />
       ))}
       <text x={cx} y={cy + 8} fill="#60a5fa" fontSize="28" fontWeight="800" textAnchor="middle">A</text>
-      <text x="14" y="22" fill="#cbd5e1" fontSize="11" fontWeight="600">Anticiclón post-frontal</text>
-      <text x="14" y="36" fill="#94a3b8" fontSize="9">Isobaras espaciadas → viento débil</text>
+      <text x="14" y="22" fill="#cbd5e1" fontSize="11" fontWeight="600">Anticiclón</text>
       <text x="358" y="252" fill="#94a3b8" fontSize="9">N ↑</text>
     </Lienzo>
   )
@@ -158,12 +157,10 @@ function EsquemaValle() {
     <Lienzo
       titulo="Corte transversal del valle · 15:00 hs"
       leyenda={<>
-        <Muestra color="#fbbf24" texto="Viento anabático (ascendente)" linea />
         <Muestra color="#f97316" texto="Foco de incendio" />
       </>}
     >
       <defs>
-        <Flecha id="va-sube" color="#fbbf24" />
         <linearGradient id="va-cielo" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#0c4a6e" stopOpacity="0.6" />
           <stop offset="1" stopColor="#0f172a" stopOpacity="0" />
@@ -185,17 +182,12 @@ function EsquemaValle() {
       <path d="M0,60 L40,50 L200,225 L360,40 L400,55 L400,260 L0,260 Z" fill="url(#va-ladera)" stroke="#65a30d" strokeWidth="1.5" />
       {/* Río en el fondo */}
       <ellipse cx="200" cy="228" rx="16" ry="3" fill="#38bdf8" opacity="0.8" />
-      {/* Flechas paralelas a las laderas, hacia las cumbres */}
-      <line x1="172" y1="172" x2="90" y2="82" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#va-sube)" className="flujo" />
-      <line x1="228" y1="172" x2="310" y2="77" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#va-sube)" className="flujo" />
-      <line x1="200" y1="200" x2="200" y2="130" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#va-sube)" className="flujo" opacity="0.6" />
       {/* Foco de incendio en la ladera baja */}
       <g transform="translate(258,156)">
         <path d="M0,0 C-8,-10 -2,-18 2,-26 C4,-16 12,-14 8,0 Z" fill="#f97316" />
         <path d="M2,0 C-2,-6 1,-11 3,-15 C5,-9 8,-7 6,0 Z" fill="#fde047" />
       </g>
-      <text x="14" y="22" fill="#cbd5e1" fontSize="11" fontWeight="600">Laderas soleadas → aire cálido asciende</text>
-      <text x="14" y="36" fill="#94a3b8" fontSize="9">Sin viento sinóptico dominante · 15:00 hs</text>
+      <text x="14" y="22" fill="#cbd5e1" fontSize="11" fontWeight="600">Sin viento sinóptico dominante · 15:00 hs</text>
       <text x="200" y="250" fill="#94a3b8" fontSize="9" textAnchor="middle">fondo del valle</text>
     </Lienzo>
   )

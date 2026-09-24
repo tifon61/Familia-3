@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { CheckCircle2, XCircle, Copy, Check, Download, Printer, RotateCcw, Award, MapPin, Users, CalendarClock, WifiOff, Loader2 } from 'lucide-react'
+import { CheckCircle2, XCircle, Copy, Check, Download, Printer, RotateCcw, MapPin, Users, WifiOff, Loader2 } from 'lucide-react'
 import { escenarios } from '../data/escenarios'
 import { acentos } from '../data/estilos'
-import { calcularPuntaje, formatearFecha, generarTextoReporte, nombreArchivo } from '../utils/reporte'
+import { generarTextoReporte, nombreArchivo } from '../utils/reporte'
 import { INSTITUCION } from '../utils/config'
 
 // Pantalla de éxito: resumen de todo lo respondido + copiar / descargar / imprimir.
 export default function Reporte({ participante, respuestas, enviadoEn, estadoEnvio, detalleEnvio, enviando, onReintentar, onNuevaActividad }) {
   const [copiado, setCopiado] = useState(false)
-  const { correctas, total } = calcularPuntaje(respuestas)
   const texto = generarTextoReporte({ participante, respuestas, enviadoEn })
 
   async function copiar() {
@@ -93,10 +92,8 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
             Reporte de situaciones operativas
           </h3>
           <div className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
-            <Dato Icono={Users} etiqueta="Brigadista / participantes" valor={participante.nombre} />
-            <Dato Icono={MapPin} etiqueta="Localidad / base operativa" valor={participante.localidad} />
-            <Dato Icono={CalendarClock} etiqueta="Fecha de envío" valor={formatearFecha(enviadoEn)} />
-            <Dato Icono={Award} etiqueta="Opción múltiple" valor={`${correctas} de ${total} correctas`} />
+            <Dato Icono={Users} etiqueta="Participante" valor={participante.nombre} />
+            <Dato Icono={MapPin} etiqueta="Localidad" valor={participante.localidad} />
           </div>
         </header>
 
