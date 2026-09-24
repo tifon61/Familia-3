@@ -57,7 +57,7 @@ lleva unos 10 minutos.
 ## 5. Probar
 
 Hacé la actividad completa y enviá el reporte. En la planilla va a aparecer
-una hoja **Respuestas** con los encabezados en azul y tu fila.
+una pestaña **Respuestas taller patagonia** con los encabezados en azul y tu fila.
 
 ## 6. Ver los resultados
 

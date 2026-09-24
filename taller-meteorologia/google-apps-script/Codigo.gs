@@ -14,7 +14,7 @@
 // las respuestas. Mientras diga "cambiar-esta-clave", la lectura está bloqueada.
 const CLAVE_RESULTADOS = "cambiar-esta-clave";
 
-const NOMBRE_HOJA = "Respuestas";
+const NOMBRE_HOJA = "Respuestas taller patagonia";
 const COLUMNA_ID = "ID envío";
 const COLUMNA_FECHA = "Fecha de envío";
 

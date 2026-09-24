@@ -9,6 +9,10 @@ export async function traerResultados(clave) {
   const respuesta = await fetch(url)
   const datos = await respuesta.json()
   if (!datos.ok) throw new Error(datos.error || 'No se pudieron leer los resultados')
+  // El script viejo responde ok pero sin "filas": no tiene la parte de resultados
+  if (!Array.isArray(datos.filas)) {
+    throw new Error('El script de Google es una versión anterior y no puede mostrar resultados. Pegá el Codigo.gs nuevo y publicá una nueva versión.')
+  }
   return datos.filas
 }
 
