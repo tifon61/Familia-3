@@ -21,6 +21,7 @@ const estadoVacio = {
   completadas: {},
   enviadoEn: null,
   estadoEnvio: null, // 'enviado' | 'error' | 'local'
+  detalleEnvio: null, // motivo técnico si falló el envío
   idEnvio: null, // se crea una sola vez, así un reintento no duplica la fila
   logo: null,
 }
@@ -91,9 +92,9 @@ function Actividad() {
     setEnviando(true)
     const enviadoEn = estado.enviadoEn ?? new Date().toISOString()
     const idEnvio = estado.idEnvio ?? nuevoIdEnvio()
-    const estadoEnvio = await enviarReporte({ participante: estado.participante, respuestas: estado.respuestas, enviadoEn, idEnvio })
+    const { estado: estadoEnvio, detalle: detalleEnvio } = await enviarReporte({ participante: estado.participante, respuestas: estado.respuestas, enviadoEn, idEnvio })
     setEnviando(false)
-    actualizar({ pantalla: 'reporte', enviadoEn, idEnvio, estadoEnvio })
+    actualizar({ pantalla: 'reporte', enviadoEn, idEnvio, estadoEnvio, detalleEnvio })
   }
 
   function reiniciar() {
@@ -136,6 +137,7 @@ function Actividad() {
           respuestas={estado.respuestas}
           enviadoEn={estado.enviadoEn}
           estadoEnvio={estado.estadoEnvio}
+          detalleEnvio={estado.detalleEnvio}
           enviando={enviando}
           onReintentar={enviar}
           onNuevaActividad={reiniciar}

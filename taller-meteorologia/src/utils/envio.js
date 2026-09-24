@@ -37,16 +37,30 @@ function armarCampos({ participante, respuestas, enviadoEn, idEnvio }) {
 }
 
 async function enviarAGoogleSheet(campos) {
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(GOOGLE_SHEET_URL)) {
+    throw new Error('La dirección de googleSheet no parece correcta: tiene que empezar con https://script.google.com/ y terminar en /exec.')
+  }
   // Content-Type text/plain: así el navegador no hace la consulta previa
   // (CORS "preflight") que Apps Script no sabe responder. El script igual
   // lee el cuerpo como JSON.
-  const respuesta = await fetch(GOOGLE_SHEET_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ campos }),
-  })
-  const datos = await respuesta.json()
-  if (!datos.ok) throw new Error(datos.error || 'Error en Google Sheets')
+  let respuesta
+  try {
+    respuesta = await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ campos }),
+    })
+  } catch {
+    throw new Error('No se pudo conectar con Google. Si hay internet, revisá que en la implementación del script "Quién tiene acceso" sea "Cualquier persona".')
+  }
+  let datos
+  try {
+    datos = await respuesta.json()
+  } catch {
+    // Google devolvió una página (por ejemplo, la de iniciar sesión) en vez de datos
+    throw new Error(`Google respondió algo que no es del script (código ${respuesta.status}). Revisá que el acceso sea "Cualquier persona" y que la URL sea la de la última implementación.`)
+  }
+  if (!datos.ok) throw new Error(`El script de Google dio este error: ${datos.error || 'desconocido'}`)
 }
 
 async function enviarAFormspree(campos, datosReporte) {
@@ -62,16 +76,18 @@ async function enviarAFormspree(campos, datosReporte) {
   if (!respuesta.ok) throw new Error('Error en Formspree')
 }
 
-// Devuelve 'enviado' si llegó a todos los destinos configurados, 'error' si
-// alguno falló, o 'local' si no hay ninguno configurado (en ese caso el
-// reporte se entrega copiándolo o descargándolo).
+// Devuelve { estado, detalle }:
+//   estado 'enviado' si llegó a todos los destinos configurados, 'error' si
+//   alguno falló (detalle explica por qué), o 'local' si no hay ninguno
+//   configurado (el reporte se entrega copiándolo o descargándolo).
 export async function enviarReporte(datos) {
-  if (!envioConfigurado) return 'local'
+  if (!envioConfigurado) return { estado: 'local', detalle: null }
   const campos = armarCampos(datos)
   const envios = []
   if (GOOGLE_SHEET_URL) envios.push(enviarAGoogleSheet(campos))
   if (FORMSPREE_URL) envios.push(enviarAFormspree(campos, datos))
   // Promise.allSettled espera a que terminen todos, salgan bien o mal.
   const resultados = await Promise.allSettled(envios)
-  return resultados.every((r) => r.status === 'fulfilled') ? 'enviado' : 'error'
+  const fallas = resultados.filter((r) => r.status === 'rejected').map((r) => r.reason?.message || String(r.reason))
+  return fallas.length ? { estado: 'error', detalle: fallas.join(' · ') } : { estado: 'enviado', detalle: null }
 }

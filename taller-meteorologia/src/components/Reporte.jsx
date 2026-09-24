@@ -6,7 +6,7 @@ import { calcularPuntaje, formatearFecha, generarTextoReporte, nombreArchivo } f
 import { INSTITUCION } from '../utils/config'
 
 // Pantalla de éxito: resumen de todo lo respondido + copiar / descargar / imprimir.
-export default function Reporte({ participante, respuestas, enviadoEn, estadoEnvio, enviando, onReintentar, onNuevaActividad }) {
+export default function Reporte({ participante, respuestas, enviadoEn, estadoEnvio, detalleEnvio, enviando, onReintentar, onNuevaActividad }) {
   const [copiado, setCopiado] = useState(false)
   const { correctas, total } = calcularPuntaje(respuestas)
   const texto = generarTextoReporte({ participante, respuestas, enviadoEn })
@@ -54,10 +54,18 @@ export default function Reporte({ participante, respuestas, enviadoEn, estadoEnv
             ? 'Tus respuestas llegaron al equipo del taller. Igual podés guardarte una copia.'
             : 'Completaste las 4 situaciones operativas. Guardá o compartí el reporte para entregarlo al equipo del taller.'}
         </p>
+        {estadoEnvio === 'local' && (
+          <p className="mx-auto mt-4 max-w-xl rounded-lg bg-white/10 px-4 py-2 text-xs font-semibold text-white/80">
+            Este reporte no se envió a ninguna planilla (no hay una configurada en la app). Copialo o descargalo para entregarlo.
+          </p>
+        )}
         {estadoEnvio === 'error' && (
           <div className="mx-auto mt-5 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-[#fde68a] border-l-4 border-l-[#f59e0b] bg-[#fffbeb] p-4 text-sm font-semibold text-[#78350f] sm:flex-row sm:text-left">
             <WifiOff className="h-5 w-5 shrink-0 text-[#b45309]" />
-            <p className="flex-1">No se pudo enviar por internet. Reintentá cuando tengas señal, o copiá / descargá el reporte y mandalo por otro medio.</p>
+            <div className="flex-1">
+              <p>No se pudo enviar el reporte. Reintentá cuando tengas señal, o copiá / descargá el reporte y mandalo por otro medio.</p>
+              {detalleEnvio && <p className="mt-1.5 text-xs font-medium text-[#92400e]">Detalle: {detalleEnvio}</p>}
+            </div>
             <button onClick={onReintentar} disabled={enviando} className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#f59e0b] px-3 py-2 font-extrabold text-white transition hover:brightness-110 disabled:opacity-60">
               {enviando && <Loader2 className="h-4 w-4 animate-spin" />} Reintentar envío
             </button>
