@@ -1,72 +1,37 @@
-# Familia Alrededor del Mundo
+# Taller de Información Meteorológica — Actividad Final (Patagonia)
 
-App para compartir en familia qué hora es y qué está haciendo cada uno: un
-mapa mundial con la ubicación de cada persona, relojes en vivo por zona
-horaria, y un muro familiar donde cualquiera puede contar dónde está y
-subir fotos o videos.
+App web para brigadistas forestales: 4 situaciones meteorológicas con
+preguntas y decisiones operativas, envío de respuestas a Google Sheets y una
+página interna de resultados.
 
-## Cómo funciona (para entender el código)
+## ¿Qué hay en cada carpeta?
 
-No hay servidor propio ni base de datos tradicional. Todo corre en dos
-lugares gratuitos:
-
-| Parte | Dónde vive | Qué hace |
+| Carpeta | Qué es | ¿Qué hago con esto? |
 |---|---|---|
-| Sitio (HTML/CSS/JS) | GitHub Pages | Muestra el mapa, los relojes, el muro y los perfiles. Es 100% estático: no hay build, no hay backend propio. |
-| Lista de familiares | `data/familiares.json` en este repo | Quiénes son: nombre, avatar, bio, y una ubicación/zona horaria *inicial*. Se edita a mano y se sube con `git push`. |
-| Ubicación actual + muro (fotos/videos) + perfil editable | Google Drive + Google Sheets, vía un script de Google Apps Script | Cuando alguien hace "check-in" desde la home, el script actualiza la hoja "Ubicaciones" y agrega la publicación a "Publicaciones". Cuando alguien edita su nombre/foto/bio desde su perfil, se guarda en la hoja "Perfiles". El sitio combina las tres para armar el mapa, las tarjetas y el muro. |
+| **`para-subir/`** | La app lista: `index.html` + carpeta `imagenes/` | **Se copia al repo donde se publica la actividad.** Es lo único que va ahí. |
+| **`google-sheets/`** | `Codigo.gs` (el script) y `GOOGLE-SHEETS.md` (la guía) | El `Codigo.gs` se pega en **Extensiones → Apps Script** de la planilla. |
+| `codigo-fuente/` | El código con el que se genera `para-subir/index.html` | **No se copia a ningún lado.** Solo se usa para hacer cambios. |
 
-### Piezas clave del código
+## Pasos cada vez que hay una versión nueva
 
-- `assets/js/reloj.js`: usa [Luxon](https://moment.github.io/luxon/) para
-  calcular la hora actual en cualquier zona horaria IANA (ej.
-  `Europe/Paris`, `Australia/Sydney`), manejando correctamente los cambios
-  de horario de verano.
-- `assets/js/api.js`: todo lo que habla con el backend de Google — pedir
-  datos, publicar, convertir un archivo a base64, pedir la ubicación del
-  navegador y (best-effort) convertir lat/lon en ciudad/país.
-- `assets/js/main.js`: dibuja el mapa con [Leaflet](https://leafletjs.com/),
-  las tarjetas de la home con la hora de cada uno, el formulario de
-  check-in, y el muro familiar (todas las publicaciones, de todos,
-  ordenadas por fecha).
-- `assets/js/perfil.js`: la vista de una sola persona — su hora, su
-  ubicación actual, y solo sus publicaciones.
-- `google-apps-script/Code.gs`: el "backend". `doGet` devuelve las
-  publicaciones y las ubicaciones guardadas; `doPost` recibe un check-in
-  (actualiza la ubicación de esa persona) y, si viene con texto o archivo,
-  también crea una publicación nueva en el muro.
+1. Copiar **`para-subir/index.html`** al repo de publicación (reemplazando el anterior).
+2. Si cambiaron imágenes, copiar también la carpeta **`para-subir/imagenes/`**.
+3. Solo si se avisa que cambió el script: pegar de nuevo **`google-sheets/Codigo.gs`**
+   en Apps Script y publicar una **nueva versión** de la implementación.
 
-### El formulario de "check-in"
+## Configuración (dentro de `index.html`)
 
-Cuando alguien completa dónde está en la home:
+Cerca del principio de `para-subir/index.html`:
 
-1. Puede tocar "Usar mi ubicación actual" — el navegador pide permiso de
-   geolocalización, y la app intenta convertir esas coordenadas en
-   ciudad/país automáticamente (usando el servicio gratuito
-   [Nominatim](https://nominatim.org/) de OpenStreetMap). Si falla, se
-   completa a mano.
-2. La zona horaria se detecta sola con `Intl.DateTimeFormat().resolvedOptions().timeZone`
-   — es la zona horaria configurada en su propio dispositivo, así que no
-   hace falta ningún servicio externo para eso.
-3. Al publicar, esa ubicación queda guardada como "la última conocida" de
-   esa persona (mueve su marcador en el mapa) y, si escribió algo o subió
-   una foto, también aparece como una publicación nueva en el muro.
+```js
+googleSheet: 'https://script.google.com/macros/s/…/exec',  // URL del script
+```
 
-## Puesta en marcha
+Si esa línea queda vacía (`''`), la app no envía las respuestas a ninguna
+planilla y al final lo avisa.
 
-1. Editá `data/familiares.json` con los datos reales de tu familia (nombre,
-   avatar, bio, y una ubicación inicial — se va a ir actualizando sola
-   cuando cada uno haga su primer check-in).
-2. Seguí [`SETUP.md`](SETUP.md) para activar el muro familiar (Google
-   Sheet + Apps Script + Drive) — 10-15 minutos, sin necesidad de Google
-   Cloud Console.
-3. Activá GitHub Pages (también en `SETUP.md`, Paso 5).
+## Páginas
 
-## Ideas para seguir aprendiendo / mejorar
-
-- Agregar autenticación real (Google Sign-In) para que solo la familia
-  pueda publicar.
-- Notificaciones (ej. por email) cuando alguien sube algo nuevo.
-- Mostrar el clima actual de cada ciudad además de la hora.
-- Mover la lista de familiares también a la Sheet, para poder agregar
-  gente sin tocar código.
+- **Actividad:** la dirección de la página, tal cual.
+- **Resultados (interna):** la misma dirección con `#resultados` al final. Pide
+  la `CLAVE_RESULTADOS` que está en `Codigo.gs`.

@@ -9,10 +9,10 @@ empaquetada con **Vite**.
 ## Cómo correrla
 
 ```bash
-cd taller-meteorologia
+cd codigo-fuente
 npm install      # instala dependencias (solo la primera vez)
 npm run dev      # servidor de desarrollo con recarga automática
-npm run build    # genera la versión final en ../meteo
+npm run build    # genera la versión final en ../para-subir
 ```
 
 El build genera **un solo `index.html`** (con el JS y el CSS adentro) más la
@@ -32,21 +32,20 @@ window.CONFIG_TALLER = {
 
 - **googleSheet:** URL de la aplicación web de Apps Script. Cada reporte se
   guarda como una fila en una Google Sheet. El script y la guía paso a paso
-  están en `google-apps-script/` (`Codigo.gs` y `GOOGLE-SHEETS.md`).
+  están en la carpeta `google-sheets/` de la raíz del repo.
 - **formspree:** si se completa, al tocar "Enviar Reporte" las respuestas llegan
   por mail a la cuenta de Formspree. Si falla (sin señal), la app avisa y ofrece
   reintentar o copiar/descargar el reporte. Vacío = no se envía nada.
 - **institucion:** el nombre que aparece debajo del título.
-- **Imágenes:** en `imagenes/` se ponen `logo.png`, `logo-institucion.png`,
-  `fondo.jpg` y `situacion-1.jpg` …
-  `situacion-4.jpg` (ver `imagenes/LEEME.txt`). Las que no estén no se muestran.
+- **Imágenes:** van en `imagenes/`, con los nombres que lista
+  `imagenes/LEEME.txt`. Las que no estén no se muestran.
 - **Localidades del desplegable:** `src/data/localidades.js` (esto sí requiere
   volver a compilar).
 
-La versión compilada se guarda en la carpeta `meteo/` de la raíz del repo, así
-GitHub Pages la sirve directamente en `https://<usuario>.github.io/<repo>/meteo/`
-sin necesitar un paso de compilación en el servidor. **Después de cambiar el
-código hay que volver a correr `npm run build` y commitear `meteo/`.**
+La versión compilada se guarda en la carpeta `para-subir/` de la raíz del
+repo: es exactamente lo que se copia al repositorio donde se publica la
+actividad. **Después de cambiar el código hay que volver a correr
+`npm run build` y commitear `para-subir/`.**
 
 ## Página interna de resultados
 
@@ -81,7 +80,7 @@ src/
     analisis.js            convierte las filas de la planilla en estadísticas
     resultadosApi.js       lee las filas del script (con clave) y genera datos de ejemplo
     envio.js               manda el reporte a Google Sheets y/o Formspree (fetch + async/await)
-google-apps-script/
+../google-sheets/          (en la raíz del repo)
   Codigo.gs                el "backend": recibe cada reporte y lo escribe en la planilla
   GOOGLE-SHEETS.md         guía para crear la planilla y publicar el script
 ```
