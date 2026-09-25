@@ -11,8 +11,6 @@ export const INSTITUCION = config.institucion ?? 'Grupo de Pronóstico'
 // Nombres fijos de imágenes: si existen en la carpeta, la app las muestra;
 // si no existen, simplemente no aparecen.
 export const imagenes = {
-  logo: `${carpeta}logo.png`,
-  logoInstitucion: `${carpeta}logo-institucion.png`,
   fondo: `${carpeta}fondo.jpg`,
 }
 

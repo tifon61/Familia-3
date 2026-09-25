@@ -23,7 +23,6 @@ const estadoVacio = {
   estadoEnvio: null, // 'enviado' | 'error' | 'local'
   detalleEnvio: null, // motivo técnico si falló el envío
   idEnvio: null, // se crea una sola vez, así un reintento no duplica la fila
-  logo: null,
 }
 
 // La página interna de resultados se abre agregando #resultados a la
@@ -41,7 +40,7 @@ export default function App() {
   if (verResultados) {
     return (
       <div className="flex min-h-screen flex-col">
-        <Encabezado logo={null} onCambiarLogo={() => {}} />
+        <Encabezado />
         <Resultados />
       </div>
     )
@@ -100,7 +99,7 @@ function Actividad() {
   function reiniciar() {
     if (!window.confirm('¿Seguro que querés borrar todas las respuestas y empezar de nuevo?')) return
     borrarEstado()
-    setEstado((prev) => ({ ...estadoVacio, logo: prev.logo })) // el logo se conserva
+    setEstado({ ...estadoVacio })
   }
 
   // useCallback mantiene la misma función entre renders, así el efecto del
@@ -110,7 +109,7 @@ function Actividad() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Encabezado logo={estado.logo} onCambiarLogo={(logo) => actualizar({ logo })} />
+      <Encabezado />
 
       {estado.pantalla === 'inicio' && (
         <Inicio

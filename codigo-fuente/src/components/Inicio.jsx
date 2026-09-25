@@ -86,7 +86,7 @@ export default function Inicio({ datosIniciales, onComenzar }) {
 
             <div className="mt-5">
               <label htmlFor="localidad" className="mb-1.5 block text-xs font-extrabold uppercase tracking-wide text-primario">
-                Localidad / Base operativa <span className="text-peligro">*</span>
+                Localidad <span className="text-peligro">*</span>
               </label>
               <div className="relative">
                 <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-apagado" />
@@ -106,7 +106,7 @@ export default function Inicio({ datosIniciales, onComenzar }) {
                 <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-apagado" />
               </div>
               {intentado && errorLocalidad && seleccion !== OTRA && (
-                <p className="mt-1.5 text-xs font-semibold text-peligro">Elegí la localidad o base operativa.</p>
+                <p className="mt-1.5 text-xs font-semibold text-peligro">Elegí la localidad.</p>
               )}
             </div>
             {seleccion === OTRA && (
@@ -116,7 +116,7 @@ export default function Inicio({ datosIniciales, onComenzar }) {
                 Icono={MapPin}
                 valor={otra}
                 onCambio={setOtra}
-                placeholder="Escribí tu localidad o base"
+                placeholder="Escribí tu localidad"
                 error={intentado && errorLocalidad ? 'Escribí el nombre de la localidad.' : null}
               />
             )}

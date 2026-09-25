@@ -30,7 +30,7 @@ export function generarTextoReporte({ participante, respuestas, enviadoEn }) {
     'Reporte de situaciones operativas',
     linea,
     `Brigadista / participantes: ${participante.nombre}`,
-    `Localidad / base operativa: ${participante.localidad}`,
+    `Localidad:                  ${participante.localidad}`,
     `Fecha de envío:             ${formatearFecha(enviadoEn)}`,
     `Opción múltiple:            ${correctas} de ${total} correctas`,
     '',

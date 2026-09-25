@@ -6,8 +6,6 @@ Los nombres tienen que ser EXACTAMENTE estos (minúsculas, sin espacios ni
 tildes). Si una imagen no está, la app simplemente no la muestra.
 
 Generales (opcionales):
-  logo.png                 Logo del Grupo de Pronóstico (redondo, arriba a la izquierda)
-  logo-institucion.png     Logo de la facultad/institución (al lado del anterior)
   fondo.jpg                Foto de fondo de la pantalla de inicio
 
 Situación 1 - Frente frío:
