@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root{
+    --chalkboard:#1F2E24; --chalkboard-2:#243528; --chalkboard-line: rgba(243,236,217,0.08);
+    --paper:#F3ECD9; --paper-2:#ece2c9; --ink:#2B2620; --ink-soft:#5b5548; --chalk:#F3ECD9;
+    --verde:#5B8C6E; --verde-deep:#3f6c53; --amarillo:#D9A441; --amarillo-deep:#a97a24;
+    --rojo:#C1502E; --rojo-deep:#933b21; --gris:#8B8378; --gris-deep:#6b6459; --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: linear-gradient(var(--chalkboard-line) 1px, transparent 1px) 0 0/100% 42px, var(--chalkboard);
+    color:var(--chalk); font-family:'Inter',sans-serif; min-height:100vh; padding-bottom:60px;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 40px;}
+  header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px;border-bottom:2px dashed var(--chalkboard-line);padding-bottom:18px;}
+  header.top h1{font-family:'Caveat',cursive;font-size:48px;font-weight:700;margin:0;line-height:1;color:var(--chalk);}
+  header.top p{margin:6px 0 0;color:#c9c2ac;font-size:14px;max-width:480px;}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;}
+  .stat-chip{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;padding:8px 12px;border-radius:20px;display:flex;align-items:center;gap:7px;background:rgba(0,0,0,0.18);}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:22px;}
+  .toolbar input, .toolbar select{font-family:'Inter',sans-serif;font-size:14px;padding:9px 12px;border-radius:8px;border:1px solid var(--chalkboard-line);background:var(--chalkboard-2);color:var(--chalk);}
+  .toolbar input::placeholder{color:#8b9188;}
+  .toolbar input:focus, .toolbar select:focus{outline:2px solid var(--amarillo);outline-offset:1px;}
+  .btn{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;padding:10px 16px;border-radius:8px;border:none;transition:transform .12s ease;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn:focus-visible{outline:2px solid var(--amarillo);outline-offset:2px;}
+  .btn-primary{background:var(--paper);color:var(--ink);}
+  .btn-ghost{background:transparent;color:var(--chalk);border:1px solid var(--chalkboard-line);}
+  .btn[disabled]{opacity:.5;cursor:wait;}
+  .spacer{flex:1;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+  .card{background:var(--paper);color:var(--ink);border-radius:var(--radius);padding:18px 18px 16px;position:relative;box-shadow:0 6px 0 rgba(0,0,0,0.22), 0 10px 18px rgba(0,0,0,0.28);border:1px solid var(--paper-2);cursor:pointer;}
+  .card:hover{transform:translateY(-2px);}
+  .card:focus-visible{outline:3px solid var(--amarillo);}
+  .stamp{position:absolute;top:-10px;right:14px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;padding:5px 9px;border-radius:5px;color:#fff;transform:rotate(-4deg);box-shadow:0 2px 4px rgba(0,0,0,0.3);letter-spacing:.02em;}
+  .card h3{font-family:'Caveat',cursive;font-size:26px;margin:6px 0 2px;line-height:1.05;}
+  .card .zona{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .card .info-line{font-size:13px;color:var(--ink-soft);margin:2px 0;}
+  .card .semaforo-label{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;margin-top:10px;}
+  .empty{text-align:center;padding:60px 20px;color:#a9a190;font-family:'Caveat',cursive;font-size:26px;}
+  .overlay{position:fixed;inset:0;background:rgba(15,20,16,0.65);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;z-index:50;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--paper);color:var(--ink);border-radius:12px;padding:26px;width:100%;max-width:480px;box-shadow:0 20px 50px rgba(0,0,0,0.5);}
+  .modal h2{font-family:'Caveat',cursive;font-size:30px;margin:0 0 16px;}
+  .field{margin-bottom:12px;display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;}
+  .field input, .field select, .field textarea{font-family:'Inter',sans-serif;font-size:14px;padding:9px 10px;border-radius:7px;border:1px solid #d8cca8;background:#fffdf7;color:var(--ink);}
+  .field textarea{resize:vertical;min-height:60px;}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+  .modal-actions .btn-secondary{background:transparent;color:var(--ink-soft);border:1px solid #d8cca8;}
+  .btn-danger{background:transparent;color:var(--rojo-deep);border:1px solid var(--rojo);margin-right:auto;}
+  .timeline{margin-top:14px;max-height:340px;overflow:auto;padding-right:4px;}
+  .tl-item{border-left:2px solid #d8cca8;padding:4px 0 14px 14px;position:relative;}
+  .tl-item::before{content:"";position:absolute;left:-5px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--ink-soft);}
+  .tl-head{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .tl-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-soft);}
+  .tl-edit{background:transparent;border:1px solid #d8cca8;border-radius:6px;color:var(--ink-soft);font-size:11px;padding:2px 8px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .tl-edit:hover{background:#fffdf7;color:var(--ink);}
+  .tl-tipo{font-weight:700;font-size:13px;margin:2px 0;}
+  .tl-desc{font-size:13px;color:var(--ink-soft);}
+  .tl-autor{font-size:11px;color:#a79b7c;margin-top:2px;}
+  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:100;}
+  .toast.show{opacity:1;}
+  .loading{text-align:center;padding:60px 20px;color:#a9a190;font-family:'JetBrains Mono',monospace;font-size:13px;}
+  @media (max-width:520px){ header.top h1{font-size:38px;} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Radar de Escuelas</h1>
+      <p>Seguimiento de contacto, visitas y talleres con las escuelas rurales del proyecto de extensión.</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <input id="buscador" type="text" placeholder="Buscar escuela..." oninput="renderCards()"/>
+    <select id="filtroZona" onchange="renderCards()"><option value="">Todas las zonas</option></select>
+    <select id="filtroEstado" onchange="renderCards()">
+      <option value="">Todos los estados</option>
+      <option value="rojo">🔴 Urgente</option>
+      <option value="amarillo">🟡 Atención</option>
+      <option value="verde">🟢 Al día</option>
+      <option value="gris">⚪ Sin contacto aún</option>
+    </select>
+    <div class="spacer"></div>
+    <button class="btn btn-ghost" onclick="openActividadModal()">+ Registrar actividad</button>
+    <button class="btn btn-primary" onclick="openEscuelaModal()">+ Nueva escuela</button>
+  </div>
+
+  <div class="grid" id="grid"><div class="loading">Cargando datos de la planilla...</div></div>
+</div>
+
+<div class="overlay" id="overlayEscuela">
+  <div class="modal">
+    <h2>Nueva escuela</h2>
+    <div class="field"><label>Nombre</label><input id="escNombre" type="text" placeholder="Ej: Escuela N°12"/></div>
+    <div class="field"><label>Zona / paraje</label><input id="escZona" type="text" placeholder="Ej: Ruta 6 km 14"/></div>
+    <div class="field"><label>Contacto (nombre)</label><input id="escContactoNombre" type="text" placeholder="Directora, docente, etc"/></div>
+    <div class="field"><label>Teléfono / WhatsApp</label><input id="escContactoTel" type="text" placeholder="+54 9 ..."/></div>
+    <div class="field"><label>Notas</label><textarea id="escNotas" placeholder="Cualquier dato útil"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('overlayEscuela')">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarEscuela" onclick="guardarEscuela()">Guardar escuela</button>
+    </div>
+  </div>
+</div>
+
+<!-- Este mismo modal sirve para REGISTRAR una actividad nueva y para EDITAR
+     una existente. Qué modo está activo lo decide la variable JS
+     actividadEditandoId (null = nueva; un id = editando esa). -->
+<div class="overlay" id="overlayActividad">
+  <div class="modal">
+    <h2 id="actTitulo">Registrar actividad</h2>
+    <div class="field"><label>Tipo</label>
+      <select id="actTipo" onchange="actualizarModoEscuela()">
+        <option value="visita">Visita presencial</option>
+        <option value="taller">Taller dictado</option>
+        <option value="material_whatsapp">Material enviado por WhatsApp</option>
+        <option value="informe_tiempo">Pedido de informe del tiempo</option>
+        <option value="llamada">Llamada / contacto telefónico</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <div class="field" id="campoEscuelaUnica">
+      <label>Escuela</label>
+      <select id="actEscuela"></select>
+    </div>
+    <div class="field" id="campoEscuelasMultiples" style="display:none;">
+      <label>Escuelas (tildá todas las que corresponda)</label>
+      <div style="display:flex;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost" style="padding:3px 9px;font-size:12px;color:var(--ink);border:1px solid #d8cca8;" onclick="toggleSeleccionarTodas()">Marcar / desmarcar todas</button>
+      </div>
+      <div id="listaEscuelasCheck" style="max-height:180px;overflow:auto;border:1px solid #d8cca8;border-radius:7px;padding:8px;background:#fffdf7;display:flex;flex-direction:column;gap:6px;margin-top:4px;"></div>
+    </div>
+    <div class="field"><label>Fecha</label><input id="actFecha" type="date"/></div>
+    <div class="field"><label>Detalle</label><textarea id="actDesc" placeholder="Qué se hizo, quién asistió, qué se envió..."></textarea></div>
+    <div class="field"><label>Tu nombre</label><input id="actAutor" type="text" placeholder="Quién carga este registro"/></div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="btnEliminarActividad" style="display:none;" onclick="eliminarActividadActual()">Eliminar</button>
+      <button class="btn btn-secondary" onclick="cancelarActividad()">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarActividad" onclick="guardarActividad()">Guardar actividad</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayHistorial">
+  <div class="modal" style="max-width:560px;">
+    <h2 id="histTitulo">Historial</h2>
+    <div id="histInfo" style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;"></div>
+    <div class="timeline" id="histTimeline"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="color:var(--ink);border:1px solid #d8cca8;" onclick="closeModal('overlayHistorial')">Cerrar</button>
+      <button class="btn btn-primary" id="histAgregarBtn">+ Agregar actividad acá</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// -----------------------------------------------------------------
+// Esta vez el "backend" no es window.storage: son funciones reales
+// de Google Apps Script (archivo Code.gs) que leen y escriben la
+// Google Sheet. Se llaman con google.script.run, que es asíncrono
+// por callbacks; lo envolvemos en una Promise para poder usar
+// async/await, que es más fácil de leer.
+// -----------------------------------------------------------------
+function runServer(fnName, ...args){
+  return new Promise((resolve, reject) => {
+    google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+      [fnName](...args);
+  });
+}
+
+let schools = [];
+let activities = [];
+
+// null  -> el modal de actividad está en modo "registrar nueva"
+// "abc" -> el modal está editando la actividad con id "abc"
+let actividadEditandoId = null;
+
+const UMBRAL_AMARILLO = 15;
+const UMBRAL_ROJO = 30;
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+// Fecha de HOY en formato yyyy-MM-dd según el reloj local de la compu.
+// Ojo: new Date().toISOString() da la fecha en UTC, así que en Argentina
+// (UTC-3) después de las 21 hs devolvía ¡la fecha de mañana!
+function hoyLocal(){
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
+async function cargarTodo(){
+  try{
+    const datos = await runServer('obtenerDatos');
+    schools = datos.escuelas || [];
+    activities = datos.actividades || [];
+  }catch(e){
+    document.getElementById('grid').innerHTML = '<div class="empty">No se pudo conectar con la planilla. Revisá el deployment.</div>';
+    return;
+  }
+
+  // el nombre de quien carga se recuerda en este navegador (localStorage sí
+  // funciona acá porque ya no estamos dentro de un artifact de Claude)
+  const autorGuardado = localStorage.getItem('radar_autor');
+  if(autorGuardado) document.getElementById('actAutor').value = autorGuardado;
+
+  poblarSelectZonas();
+  poblarSelectEscuelas();
+  renderCards();
+}
+
+function actividadesDe(escuelaId){
+  return activities.filter(a => a.escuela_id === escuelaId)
+    .sort((a,b) => new Date(b.fecha) - new Date(a.fecha));
+}
+
+function diasDesde(fechaStr){
+  const hoy = new Date();
+  const fecha = new Date(fechaStr + 'T00:00:00');
+  return Math.floor((hoy - fecha) / (1000*60*60*24));
+}
+
+function estadoEscuela(escuelaId){
+  const acts = actividadesDe(escuelaId);
+  if(acts.length === 0) return {color:'gris', label:'Sin contacto aún', dias:null, prioridad:3};
+  const dias = diasDesde(acts[0].fecha);
+  if(dias > UMBRAL_ROJO) return {color:'rojo', label:'Urgente: hace ' + dias + ' días', dias, prioridad:2};
+  if(dias > UMBRAL_AMARILLO) return {color:'amarillo', label:'Atención: hace ' + dias + ' días', dias, prioridad:1};
+  return {color:'verde', label:'Al día: hace ' + dias + ' días', dias, prioridad:0};
+}
+
+function ordenPrioridad(estado){
+  if(estado.color === 'gris') return -1;
+  return estado.prioridad;
+}
+
+function poblarSelectZonas(){
+  const sel = document.getElementById('filtroZona');
+  const actuales = new Set(Array.from(sel.options).map(o=>o.value));
+  const zonas = [...new Set(schools.map(s=>s.zona).filter(Boolean))];
+  zonas.forEach(z=>{
+    if(!actuales.has(z)){
+      const opt = document.createElement('option');
+      opt.value = z; opt.textContent = z;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+function poblarSelectEscuelas(){
+  const sel = document.getElementById('actEscuela');
+  sel.innerHTML = '';
+  schools.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.id; opt.textContent = s.nombre;
+    sel.appendChild(opt);
+  });
+}
+
+function poblarListaEscuelasCheck(){
+  const cont = document.getElementById('listaEscuelasCheck');
+  cont.innerHTML = schools.map(s => `
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0;">
+      <input type="checkbox" class="chk-escuela" value="${s.id}"> ${escapeHtml(s.nombre)}
+    </label>
+  `).join('');
+}
+
+function toggleSeleccionarTodas(){
+  const boxes = document.querySelectorAll('.chk-escuela');
+  const todasMarcadas = Array.from(boxes).every(b => b.checked);
+  boxes.forEach(b => b.checked = !todasMarcadas);
+}
+
+// El material por WhatsApp normalmente se manda igual a varias escuelas a la
+// vez, así que para ese tipo mostramos checkboxes en vez de un select único.
+// EXCEPCIÓN: al editar, siempre es una sola escuela, porque cada fila de la
+// planilla es la actividad de UNA escuela (el envío masivo crea una fila por
+// escuela, y cada una se corrige por separado).
+function actualizarModoEscuela(){
+  const esMultiple = !actividadEditandoId && document.getElementById('actTipo').value === 'material_whatsapp';
+  document.getElementById('campoEscuelaUnica').style.display = esMultiple ? 'none' : 'flex';
+  document.getElementById('campoEscuelasMultiples').style.display = esMultiple ? 'flex' : 'none';
+  if(esMultiple) poblarListaEscuelasCheck();
+}
+
+function renderStats(){
+  const cont = {rojo:0, amarillo:0, verde:0, gris:0};
+  schools.forEach(s=> cont[estadoEscuela(s.id).color]++ );
+  const chips = [
+    {c:'gris', label:'sin contacto', color:'var(--gris)'},
+    {c:'rojo', label:'urgentes', color:'var(--rojo)'},
+    {c:'amarillo', label:'atención', color:'var(--amarillo)'},
+    {c:'verde', label:'al día', color:'var(--verde)'},
+  ];
+  document.getElementById('stats').innerHTML = chips.map(ch=>
+    `<span class="stat-chip"><span class="dot" style="background:${ch.color}"></span>${cont[ch.c]} ${ch.label}</span>`
+  ).join('');
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str ?? '';
+  return d.innerHTML;
+}
+
+function renderCards(){
+  renderStats();
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('buscador').value.trim().toLowerCase();
+  const zonaSel = document.getElementById('filtroZona').value;
+  const estadoSel = document.getElementById('filtroEstado').value;
+
+  let lista = schools.map(s => ({...s, estado: estadoEscuela(s.id)}));
+
+  if(q) lista = lista.filter(s => s.nombre.toLowerCase().includes(q));
+  if(zonaSel) lista = lista.filter(s => s.zona === zonaSel);
+  if(estadoSel) lista = lista.filter(s => s.estado.color === estadoSel);
+
+  lista.sort((a,b) => {
+    const pa = ordenPrioridad(a.estado), pb = ordenPrioridad(b.estado);
+    if(pa !== pb) return pa - pb;
+    return (b.estado.dias ?? 9999) - (a.estado.dias ?? 9999);
+  });
+
+  if(lista.length === 0){
+    grid.innerHTML = '<div class="empty">Todavía no hay escuelas cargadas (o ninguna coincide con el filtro).</div>';
+    return;
+  }
+
+  const colores = {rojo:'var(--rojo-deep)', amarillo:'var(--amarillo-deep)', verde:'var(--verde-deep)', gris:'var(--gris-deep)'};
+  const emojis = {rojo:'🔴', amarillo:'🟡', verde:'🟢', gris:'⚪'};
+
+  grid.innerHTML = lista.map(s => `
+    <div class="card" tabindex="0" onclick="verHistorial('${s.id}')" onkeydown="if(event.key==='Enter')verHistorial('${s.id}')">
+      <div class="stamp" style="background:${colores[s.estado.color]}">
+        ${s.estado.dias === null ? 'SIN DATOS' : s.estado.dias + ' DÍAS'}
+      </div>
+      <h3>${escapeHtml(s.nombre)}</h3>
+      <div class="zona">${escapeHtml(s.zona || 'zona sin especificar')}</div>
+      ${s.contacto_nombre ? `<div class="info-line">👤 ${escapeHtml(s.contacto_nombre)}</div>` : ''}
+      ${s.contacto_tel ? `<div class="info-line">📞 ${escapeHtml(s.contacto_tel)}</div>` : ''}
+      <div class="semaforo-label">${emojis[s.estado.color]} ${s.estado.label}</div>
+    </div>
+  `).join('');
+}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function openEscuelaModal(){
+  ['escNombre','escZona','escContactoNombre','escContactoTel','escNotas'].forEach(id=>document.getElementById(id).value='');
+  openModal('overlayEscuela');
+}
+
+// Ajusta título y botones del modal según si estamos creando o editando
+function configurarModoModalActividad(){
+  const editando = !!actividadEditandoId;
+  document.getElementById('actTitulo').textContent = editando ? 'Editar actividad' : 'Registrar actividad';
+  document.getElementById('btnGuardarActividad').textContent = editando ? 'Guardar cambios' : 'Guardar actividad';
+  document.getElementById('btnEliminarActividad').style.display = editando ? 'inline-block' : 'none';
+}
+
+function openActividadModal(escuelaIdPreseleccionada){
+  actividadEditandoId = null;
+  configurarModoModalActividad();
+
+  poblarSelectEscuelas();
+  if(schools.length === 0){ toast('Primero cargá al menos una escuela'); return; }
+
+  actualizarModoEscuela();
+
+  if(escuelaIdPreseleccionada){
+    document.getElementById('actEscuela').value = escuelaIdPreseleccionada;
+    const chk = document.querySelector(`.chk-escuela[value="${escuelaIdPreseleccionada}"]`);
+    if(chk) chk.checked = true;
+  }
+
+  document.getElementById('actFecha').value = hoyLocal();
+  document.getElementById('actDesc').value = '';
+  // Si antes se editó una actividad de otra persona, el campo quedó con su
+  // nombre: volvemos a poner el de quien usa este navegador.
+  const autorGuardado = localStorage.getItem('radar_autor');
+  if(autorGuardado) document.getElementById('actAutor').value = autorGuardado;
+  openModal('overlayActividad');
+}
+
+// Abre el mismo modal, pero precargado con los datos de una actividad existente
+function openEditarActividad(actividadId){
+  const act = activities.find(a => a.id === actividadId);
+  if(!act){ toast('No se encontró esa actividad'); return; }
+
+  actividadEditandoId = actividadId;
+  configurarModoModalActividad();
+
+  poblarSelectEscuelas();
+  document.getElementById('actTipo').value = act.tipo;
+  actualizarModoEscuela();
+  document.getElementById('actEscuela').value = act.escuela_id;
+  document.getElementById('actFecha').value = act.fecha;
+  document.getElementById('actDesc').value = act.descripcion || '';
+  document.getElementById('actAutor').value = act.autor || '';
+
+  closeModal('overlayHistorial');
+  openModal('overlayActividad');
+}
+
+// Si se cancela una edición, volvemos al historial de donde vino
+function cancelarActividad(){
+  closeModal('overlayActividad');
+  if(actividadEditandoId){
+    const act = activities.find(a => a.id === actividadEditandoId);
+    actividadEditandoId = null;
+    if(act) verHistorial(act.escuela_id);
+  }
+}
+
+async function guardarEscuela(){
+  const nombre = document.getElementById('escNombre').value.trim();
+  if(!nombre){ toast('Falta el nombre de la escuela'); return; }
+
+  const datos = {
+    nombre,
+    zona: document.getElementById('escZona').value.trim(),
+    contacto_nombre: document.getElementById('escContactoNombre').value.trim(),
+    contacto_tel: document.getElementById('escContactoTel').value.trim(),
+    notas: document.getElementById('escNotas').value.trim(),
+  };
+
+  const btn = document.getElementById('btnGuardarEscuela');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try{
+    const id = await runServer('agregarEscuela', datos);
+    schools.push({ id, ...datos });
+    poblarSelectZonas();
+    poblarSelectEscuelas();
+    closeModal('overlayEscuela');
+    renderCards();
+    toast('Escuela guardada');
+  }catch(e){
+    toast('No se pudo guardar. Probá de nuevo.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Guardar escuela';
+  }
+}
+
+async function guardarActividad(){
+  const tipo = document.getElementById('actTipo').value;
+  const fecha = document.getElementById('actFecha').value;
+  const autor = document.getElementById('actAutor').value.trim();
+  const descripcion = document.getElementById('actDesc').value.trim();
+  if(!fecha){ toast('Falta la fecha'); return; }
+
+  // Modo edición: se corrige UNA fila existente y listo
+  if(actividadEditandoId){
+    await guardarEdicionActividad({ tipo, fecha, autor, descripcion });
+    return;
+  }
+
+  // Según el tipo, la escuela sale del select único o de los checkboxes tildados
+  let escuelaIds = [];
+  if(tipo === 'material_whatsapp'){
+    escuelaIds = Array.from(document.querySelectorAll('.chk-escuela:checked')).map(b => b.value);
+    if(escuelaIds.length === 0){ toast('Tildá al menos una escuela'); return; }
+  }else{
+    const escuela_id = document.getElementById('actEscuela').value;
+    if(!escuela_id){ toast('Falta elegir la escuela'); return; }
+    escuelaIds = [escuela_id];
+  }
+
+  const btn = document.getElementById('btnGuardarActividad');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try{
+    const datosBase = { fecha, tipo, descripcion, autor };
+    const nuevos = await runServer('agregarActividadMasiva', datosBase, escuelaIds);
+    nuevos.forEach(n => activities.push(n));
+
+    if(autor) localStorage.setItem('radar_autor', autor);
+    closeModal('overlayActividad');
+    renderCards();
+    toast(escuelaIds.length > 1 ? `Actividad registrada en ${escuelaIds.length} escuelas` : 'Actividad registrada');
+
+    if(document.getElementById('overlayHistorial').classList.contains('open') && escuelaIds.length === 1){
+      verHistorial(escuelaIds[0]);
+    }
+  }catch(e){
+    toast('No se pudo guardar. Probá de nuevo.');
+  }finally{
+    btn.disabled = false; btn.textContent = 'Guardar actividad';
+  }
+}
+
+async function guardarEdicionActividad({ tipo, fecha, autor, descripcion }){
+  const escuela_id = document.getElementById('actEscuela').value;
+  if(!escuela_id){ toast('Falta elegir la escuela'); return; }
+
+  const btn = document.getElementById('btnGuardarActividad');
+  btn.disabled = true; btn.textContent = 'Guardando...';
+  try{
+    const actualizada = await runServer('editarActividad', actividadEditandoId,
+      { escuela_id, fecha, tipo, descripcion, autor });
+
+    // Reemplazamos la versión vieja en la lista local, así no hace falta
+    // volver a descargar toda la planilla para ver el cambio.
+    const i = activities.findIndex(a => a.id === actualizada.id);
+    if(i !== -1) activities[i] = actualizada;
+
+    actividadEditandoId = null;
+    closeModal('overlayActividad');
+    renderCards();
+    toast('Actividad corregida');
+    verHistorial(escuela_id);
+  }catch(e){
+    toast('No se pudo guardar el cambio. Probá de nuevo.');
+  }finally{
+    btn.disabled = false;
+    configurarModoModalActividad();
+  }
+}
+
+async function eliminarActividadActual(){
+  if(!actividadEditandoId) return;
+  if(!confirm('¿Seguro que querés borrar esta actividad? No se puede deshacer.')) return;
+
+  const id = actividadEditandoId;
+  const act = activities.find(a => a.id === id);
+  const btn = document.getElementById('btnEliminarActividad');
+  btn.disabled = true;
+  try{
+    await runServer('eliminarActividad', id);
+    activities = activities.filter(a => a.id !== id);
+    actividadEditandoId = null;
+    closeModal('overlayActividad');
+    renderCards();
+    toast('Actividad eliminada');
+    if(act) verHistorial(act.escuela_id);
+  }catch(e){
+    toast('No se pudo eliminar. Probá de nuevo.');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+const TIPO_LABELS = {
+  visita: 'Visita presencial',
+  taller: 'Taller dictado',
+  material_whatsapp: 'Material enviado por WhatsApp',
+  informe_tiempo: 'Pedido de informe del tiempo',
+  llamada: 'Llamada / contacto telefónico',
+  otro: 'Otro',
+};
+
+function verHistorial(escuelaId){
+  const escuela = schools.find(s=>s.id===escuelaId);
+  if(!escuela) return;
+  document.getElementById('histTitulo').textContent = escuela.nombre;
+  document.getElementById('histInfo').textContent =
+    (escuela.zona ? escuela.zona + ' · ' : '') +
+    (escuela.contacto_nombre ? escuela.contacto_nombre + ' ' : '') +
+    (escuela.contacto_tel ? '(' + escuela.contacto_tel + ')' : '');
+
+  const acts = actividadesDe(escuelaId);
+  const timeline = document.getElementById('histTimeline');
+  if(acts.length === 0){
+    timeline.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);">Todavía no hay actividades registradas con esta escuela.</p>';
+  }else{
+    timeline.innerHTML = acts.map(a => `
+      <div class="tl-item">
+        <div class="tl-head">
+          <div class="tl-date">${a.fecha}</div>
+          <button type="button" class="tl-edit" onclick="openEditarActividad('${a.id}')">✏️ Editar</button>
+        </div>
+        <div class="tl-tipo">${TIPO_LABELS[a.tipo] || a.tipo}</div>
+        ${a.descripcion ? `<div class="tl-desc">${escapeHtml(a.descripcion)}</div>` : ''}
+        ${a.autor ? `<div class="tl-autor">Cargado por ${escapeHtml(a.autor)}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('histAgregarBtn').onclick = () => {
+    closeModal('overlayHistorial');
+    openActividadModal(escuelaId);
+  };
+
+  openModal('overlayHistorial');
+}
+
+cargarTodo();
+</script>
+</body>
+</html>
