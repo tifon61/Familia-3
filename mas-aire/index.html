@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Más Aire · Presupuestos y Facturas</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <!--
+    La página tiene DOS partes:
+    1) .editor  -> el formulario donde cargás los datos (no se imprime).
+    2) .hoja    -> la vista previa del documento, igual al formato en papel.
+    Cada vez que escribís algo en el formulario, app.js vuelve a "dibujar" la hoja.
+  -->
+
+  <main class="layout">
+
+    <!-- ============ 1) FORMULARIO ============ -->
+    <section class="editor" aria-label="Formulario">
+      <h1 class="editor__titulo">Generador de comprobantes</h1>
+
+      <form id="form" autocomplete="off">
+
+        <fieldset>
+          <legend>Documento</legend>
+
+          <div class="fila">
+            <label>Tipo
+              <select name="tipo">
+                <option value="PRESUPUESTO">Presupuesto</option>
+                <option value="FACTURA">Factura</option>
+              </select>
+            </label>
+            <label>N.º
+              <input name="numero" inputmode="numeric" placeholder="0001">
+            </label>
+          </div>
+
+          <label>Trabajo
+            <!-- datalist = sugerencias, pero se puede escribir cualquier cosa -->
+            <input name="rubro" list="rubros" value="TRABAJO ELÉCTRICO">
+            <datalist id="rubros">
+              <option value="TRABAJO ELÉCTRICO">
+              <option value="INSTALACIÓN DE AIRE ACONDICIONADO">
+              <option value="MANTENIMIENTO DE AIRE ACONDICIONADO">
+              <option value="REPARACIÓN DE AIRE ACONDICIONADO">
+            </datalist>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Cliente</legend>
+          <label>Nombre
+            <input name="cliente" placeholder="Ej: María Arturi">
+          </label>
+          <div class="fila">
+            <label>Fecha
+              <input type="date" name="fecha">
+            </label>
+            <label>Teléfono / dirección <small>(opcional)</small>
+              <input name="contacto" placeholder="Opcional">
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Trabajos</legend>
+          <p class="ayuda">El importe por ítem es opcional. Si lo completás, el total se suma solo.</p>
+
+          <ol id="items" class="items"></ol>
+
+          <button type="button" id="agregar" class="btn btn--sec">+ Agregar ítem</button>
+        </fieldset>
+
+        <fieldset>
+          <legend>Total</legend>
+          <label>Valor total ($)
+            <input name="total" inputmode="decimal" placeholder="80000">
+          </label>
+          <p class="ayuda" id="ayuda-total"></p>
+
+          <label>Observaciones <small>(opcional)</small>
+            <textarea name="notas" rows="2" placeholder="Ej: Presupuesto válido por 15 días."></textarea>
+          </label>
+        </fieldset>
+
+        <div class="acciones">
+          <button type="button" id="imprimir" class="btn">Imprimir / Guardar PDF</button>
+          <button type="button" id="nuevo" class="btn btn--sec">Nuevo (limpiar)</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============ 2) VISTA PREVIA (lo que se imprime) ============ -->
+    <section class="preview" aria-label="Vista previa">
+      <article class="hoja" id="hoja">
+        <header class="hoja__cabecera">
+          <!-- Cuando tengas el logo, guardalo como mas-aire/logo.png y aparece solo.
+               Si no existe, onerror lo oculta y queda el nombre en texto. -->
+          <img src="logo.png" alt="Más Aire" class="hoja__logo" onerror="this.remove()">
+          <h2 class="hoja__empresa">MÁS AIRE ACONDICIONADO</h2>
+          <p class="hoja__tel" id="v-tel"></p>
+        </header>
+
+        <h3 class="hoja__doc" id="v-titulo"></h3>
+
+        <div class="hoja__datos">
+          <p><b>Cliente:</b> <span id="v-cliente"></span></p>
+          <p id="v-contacto-linea"><b>Contacto:</b> <span id="v-contacto"></span></p>
+          <p><b>Fecha:</b> <span id="v-fecha"></span></p>
+        </div>
+
+        <h4 class="hoja__sub">Descripción de los trabajos realizados</h4>
+
+        <table class="tabla">
+          <thead>
+            <tr id="v-thead"></tr>
+          </thead>
+          <tbody id="v-items"></tbody>
+        </table>
+
+        <div class="total">
+          <div class="total__fila">
+            <span class="total__label">VALOR TOTAL</span>
+            <span class="total__monto" id="v-total"></span>
+          </div>
+          <p class="total__letras" id="v-letras"></p>
+        </div>
+
+        <p class="hoja__notas" id="v-notas"></p>
+
+        <p class="hoja__firma">Firma del técnico: <span class="linea"></span></p>
+      </article>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

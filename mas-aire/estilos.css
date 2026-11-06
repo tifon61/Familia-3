@@ -1,0 +1,180 @@
+/* =========================================================
+   Variables: si querés cambiar un color, cambialo SOLO acá.
+   ========================================================= */
+:root {
+  --azul: #1f4e8c;        /* azul del título "MÁS AIRE ACONDICIONADO" */
+  --gris-borde: #c9ced6;
+  --gris-fondo: #f6f6f6;  /* fondo de la caja VALOR TOTAL */
+  --lila-cabecera: #eef0f8; /* fondo del encabezado de la tabla */
+  --texto: #111;
+  --fondo-app: #e9edf2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--texto);
+  background: var(--fondo-app);
+}
+
+/* ---------- Distribución general ----------
+   En el celular: formulario arriba, hoja abajo (una columna).
+   En pantallas anchas (>= 1000px): lado a lado. */
+.layout {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+@media (min-width: 1000px) {
+  .layout { grid-template-columns: 420px 1fr; align-items: start; }
+  .editor { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; }
+}
+
+/* ---------- Formulario ---------- */
+.editor {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.editor__titulo { font-size: 1.15rem; margin: 0 0 12px; color: var(--azul); }
+
+fieldset { border: 1px solid #e3e6ea; border-radius: 10px; margin: 0 0 14px; padding: 10px 12px 12px; }
+legend { font-weight: bold; font-size: .9rem; padding: 0 6px; color: var(--azul); }
+
+label { display: block; font-size: .85rem; margin-top: 8px; }
+label small { color: #777; font-weight: normal; }
+
+input, select, textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 10px;
+  font: inherit;
+  font-size: 16px; /* 16px evita que el iPhone haga zoom al tocar el campo */
+  border: 1px solid var(--gris-borde);
+  border-radius: 8px;
+  background: #fff;
+}
+textarea { resize: vertical; }
+
+.fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ayuda { font-size: .8rem; color: #666; margin: 6px 0; }
+
+.items { list-style: none; padding: 0; margin: 0 0 10px; }
+.item {
+  display: grid;
+  grid-template-columns: 1fr 110px 36px;
+  gap: 6px;
+  align-items: start;
+  margin-bottom: 8px;
+}
+.item textarea, .item input { margin-top: 0; }
+.item__borrar {
+  height: 40px; border: none; border-radius: 8px;
+  background: #fde8e8; color: #b42318; font-size: 1.1rem; cursor: pointer;
+}
+
+.btn {
+  padding: 11px 14px; border: none; border-radius: 8px;
+  background: var(--azul); color: #fff; font: inherit; font-weight: bold; cursor: pointer;
+}
+.btn--sec { background: #e8eef7; color: var(--azul); }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.acciones .btn { flex: 1 1 auto; }
+
+/* ---------- Hoja (el documento) ----------
+   Simula una hoja A4 (210mm de ancho). En el celular se achica para entrar. */
+.preview { overflow-x: auto; }
+.hoja {
+  background: #fff;
+  width: 100%;
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 16mm;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12);
+  font-size: 14px;
+}
+
+.hoja__cabecera { text-align: center; }
+.hoja__logo { max-height: 90px; max-width: 60%; margin-bottom: 6px; }
+.hoja__empresa { color: var(--azul); font-size: 28px; margin: 0; letter-spacing: .3px; }
+.hoja__tel { margin: 4px 0 0; color: #333; letter-spacing: .5px; }
+
+.hoja__doc { text-align: center; font-size: 22px; margin: 28px 0 26px; }
+
+.hoja__datos p { margin: 4px 0; }
+.hoja__sub { font-size: 15px; margin: 24px 0 12px; }
+
+/* Tabla de ítems.
+   OJO: en tu formato original el texto del ítem 2 se salía de la tabla.
+   Con "word-wrap / overflow-wrap" el texto largo baja de renglón en vez de desbordar. */
+.tabla {
+  width: 92%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.tabla th, .tabla td {
+  border: 1px solid var(--gris-borde);
+  padding: 12px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.tabla th { background: var(--lila-cabecera); font-weight: bold; }
+.tabla .col-item { width: 56px; }
+.tabla .col-importe { width: 22%; text-align: right; }
+.tabla td.col-importe { text-align: right; white-space: nowrap; }
+
+.total {
+  width: 92%;
+  margin: 28px auto 0;
+  padding: 14px 16px;
+  border: 1px solid #9aa4b2;
+  background: var(--gris-fondo);
+}
+.total__fila { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.total__label { font-weight: bold; letter-spacing: 1px; }
+.total__monto { font-size: 24px; font-weight: bold; }
+.total__letras { color: #777; font-size: 13px; margin: 14px 0 0; }
+
+.hoja__notas { margin: 22px 4% 0; font-size: 13px; color: #333; white-space: pre-line; }
+.hoja__notas:empty { display: none; }
+
+.hoja__firma { margin-top: 70px; }
+.linea { display: inline-block; width: 300px; max-width: 60%; border-bottom: 1px solid #000; }
+
+/* En el celular la hoja tiene menos margen interno para que se lea bien */
+@media (max-width: 600px) {
+  .hoja { padding: 24px 14px; min-height: auto; font-size: 13px; }
+  .hoja__empresa { font-size: 21px; }
+  .hoja__doc { font-size: 17px; }
+  .tabla, .total { width: 100%; }
+  .item { grid-template-columns: 1fr 90px 36px; }
+}
+
+/* =========================================================
+   IMPRESIÓN: cuando apretás "Imprimir / Guardar PDF"
+   se oculta el formulario y queda SOLO la hoja, tamaño A4.
+   ========================================================= */
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .editor { display: none; }
+  .layout { display: block; padding: 0; max-width: none; }
+  .hoja {
+    box-shadow: none; margin: 0; max-width: none; width: 210mm; min-height: 297mm;
+    padding: 18mm 16mm; font-size: 14px;
+  }
+  .hoja__empresa { font-size: 28px; }
+  .hoja__doc { font-size: 22px; }
+  .tabla, .total { width: 92%; }
+  /* Que el navegador imprima los colores de fondo (tabla y caja del total) */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
